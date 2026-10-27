@@ -6,50 +6,72 @@
   <title>내 취향 카드</title>
   <style>
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       display: flex;
       flex-direction: column;
+      gap: 1rem;
       min-height: 100vh;
-      margin: 0;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 1rem;
       font-family: sans-serif;
       background: #f6f6f8;
       color: #222;
     }
+    /* 헤더 · 내비게이션 · 바디 · 푸터를 각각 하나의 카드로 */
+    header, nav, main, footer {
+      border-radius: 16px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .08);
+    }
     header {
-      background: #ff7a00;
+      background: linear-gradient(135deg, #ff7a00, #ffa940);
       color: #fff;
-      padding: 1.2rem 1rem;
+      padding: 1.8rem 1rem;
       text-align: center;
     }
-    header h1 { margin: 0; font-size: 1.5rem; }
-    header p { margin: .3rem 0 0; font-size: .9rem; opacity: .9; }
-    nav { background: #333; }
+    header h1 { margin: 0; font-size: 1.6rem; }
+    header p { margin: .4rem 0 0; font-size: .9rem; opacity: .9; }
+    nav {
+      position: sticky;
+      top: 1rem;
+      z-index: 1;
+      background: #333;
+    }
     nav ul {
       display: flex;
       justify-content: center;
-      gap: 1.5rem;
+      gap: .6rem;
       list-style: none;
       margin: 0;
-      padding: .8rem 1rem;
+      padding: .6rem 1rem;
     }
-    nav a { color: #fff; text-decoration: none; }
-    nav a:hover { text-decoration: underline; }
+    nav a {
+      display: block;
+      padding: .45rem 1rem;
+      border-radius: 999px;
+      color: #fff;
+      text-decoration: none;
+    }
+    nav a:hover { background: #ff7a00; }
     main {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.5rem;
-      padding: 2rem 1rem;
+      gap: 1rem;
+      background: #fff;
+      padding: 1.5rem 1rem;
     }
     .card {
-      background: #fff;
+      background: #fff8f0;
+      border: 1px solid #ffe0c2;
       border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
       padding: 2rem;
       width: 100%;
       max-width: 360px;
       text-align: center;
+      scroll-margin-top: 5rem;
     }
     .card h2 { margin: 0 0 .5rem; font-size: 1.2rem; }
     .card p { margin: 0 0 1rem; color: #666; }
@@ -60,12 +82,12 @@
       cursor: pointer;
     }
     .promo {
-      background: #fff;
+      background: #fff8f0;
+      border: 1px solid #ffe0c2;
       border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
       padding: 1.5rem 2rem;
       width: 100%;
-      max-width: 640px;
+      scroll-margin-top: 5rem;
     }
     .promo h2 { margin: 0 0 .8rem; font-size: 1.2rem; color: #ff7a00; }
     .promo p { margin: .3rem 0; line-height: 1.6; }
@@ -76,31 +98,36 @@
       padding: 1rem;
       font-size: .85rem;
     }
+    footer p { margin: 0; }
+    @media (max-width: 480px) {
+      .promo { padding: 1.2rem; }
+      nav a { padding: .45rem .7rem; }
+    }
   </style>
 </head>
 <body>
-  <header>
+  <header id="home">
     <h1>🍊 내 취향 카드</h1>
     <p>좋아하는 것을 눌러서 모아보세요</p>
   </header>
 
   <nav>
     <ul>
-      <li><a href="#">홈</a></li>
-      <li><a href="#">내 취향</a></li>
-      <li><a href="#">소개</a></li>
+      <li><a href="#home">홈</a></li>
+      <li><a href="#like">내 취향</a></li>
+      <li><a href="#about">소개</a></li>
     </ul>
   </nav>
 
   <main>
-    <section class="card">
+    <section class="card" id="like">
       <h2>좋아요 카운터</h2>
       <p>버튼을 누를 때마다 2씩 올라가요</p>
       <div id="count">0</div>
       <button id="btn">+2</button>
     </section>
 
-    <section class="promo">
+    <section class="promo" id="about">
       <h2>🌋 제주대학교에 오신 것을 환영합니다</h2>
       <p>삼다도 제주의 중심에서 꿈을 키우는 대학, 제주대학교입니다.</p>
       <p>한라산의 기상과 푸른 바다의 포용력을 닮은 인재를 길러냅니다.</p>
