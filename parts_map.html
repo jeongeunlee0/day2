@@ -45,6 +45,11 @@
     .pair .item .tag { flex: none; align-self: flex-start; }
     .pair .item .tag::before { content: "▲ "; }
     .box-out { outline: 2px dashed #2a6df4; outline-offset: 3px; border-radius: 6px; }
+    .m-tabs { display: flex; gap: 4px; margin-bottom: .8rem; border-bottom: 2px solid #e6f3e8; }
+    .m-tabs .m-tab { border: 0; background: none; padding: .5rem .9rem; margin-bottom: -2px; border-bottom: 3px solid transparent; font-size: .9rem; font-weight: bold; color: #666; cursor: pointer; }
+    .m-tabs .m-tab[aria-selected="true"] { color: #2f6f3e; border-bottom-color: #2f6f3e; }
+    .tabs-out { outline: 2px dashed #7a4fd0; outline-offset: 3px; border-radius: 6px; margin-bottom: .8rem; }
+    .tag.purple { background: #7a4fd0; }
 
     table { margin: 2rem auto 0; border-collapse: collapse; background: #fff; width: 100%; }
     th, td { border: 1px solid #ddd; padding: .5rem .8rem; text-align: left; font-size: .9rem; }
@@ -61,7 +66,7 @@
 </head>
 <body>
   <h1>🧩 index.html 화면 부품 지도</h1>
-  <div class="sub">점선 = 실제 화면 부품 · 위에서 아래 순서는 index.html과 같습니다 (버튼은 클릭됩니다)</div>
+  <div class="sub">점선 = 실제 화면 부품 · 위에서 아래 순서는 index.html과 같습니다 (좋아요 버튼과 탭은 눌러 볼 수 있어요)</div>
 
   <div class="wrap">
     <div class="item">
@@ -78,10 +83,26 @@
       <div>
         <div class="item" style="margin-bottom:1rem">
           <div class="mock m-card">
-            <h4>🛒 대표 특산물</h4>
-            <div class="m-grid"><div>🍊 감귤</div><div>🍋 한라봉</div><div>🐖 흑돼지</div><div>🐟 갈치</div><div>🍡 오메기떡</div><div>🥜 당근·감자·마늘</div></div>
+            <div class="tabs-out"><div class="m-tabs" role="tablist">
+              <button class="m-tab" id="mt1" role="tab" aria-selected="true">🛒 대표 특산물</button>
+              <button class="m-tab" id="mt2" role="tab" aria-selected="false">🖼️ 사진 검색</button>
+            </div></div>
+            <div id="mp1">
+              <h4>🛒 대표 특산물</h4>
+              <div class="m-grid"><div>🍊 감귤</div><div>🍋 한라봉</div><div>🐖 흑돼지</div><div>🐟 갈치</div><div>🍡 오메기떡</div><div>🥜 당근·감자·마늘</div></div>
+            </div>
+            <div id="mp2" hidden>
+              <h4>🖼️ 제주 사진 검색</h4>
+              <div class="m-search">
+                <span class="box-out" style="flex:1;display:flex"><input placeholder="검색어 입력 (예: jeju, tangerine)"></span>
+                <span class="box-out" style="display:flex"><button>검색</button></span>
+              </div>
+              <div class="m-photo">Pixabay 사진이 0.5초마다 한 장씩 넘어가요</div>
+              <p style="margin:.6rem 0 0;font-size:.8rem;color:#2a6df4">▲ 파란 점선: 입력창 1개 · 버튼 1개 (이 탭에서만 보여요)</p>
+            </div>
           </div>
-          <span class="tag">카드<small>&lt;section&gt; 특산물 6개</small></span>
+          <span class="tag">카드<small>&lt;section&gt; 탭 2개로 화면 전환</small></span>
+          <span class="tag purple">탭 (눌러 보세요)<small>role="tablist" · 탭 2개</small></span>
         </div>
         <div class="item">
           <div class="mock m-card">
@@ -105,18 +126,6 @@
     </div>
 
     <div class="item">
-      <div class="mock m-card">
-        <h4>🖼️ 제주 사진 검색</h4>
-        <div class="m-search">
-          <span class="box-out" style="flex:1;display:flex"><input placeholder="검색어 입력 (예: jeju, tangerine)"></span>
-          <span class="box-out" style="display:flex"><button>검색</button></span>
-        </div>
-        <div class="m-photo">사진이 0.5초마다 한 장씩 넘어가요</div>
-      </div>
-      <span class="tag">카드<small>&lt;section&gt; 사진 검색</small></span>
-    </div>
-
-    <div class="item">
       <div class="mock m-footer">© 2026 제주 특산물 홍보관</div>
       <span class="tag">푸터<small>&lt;footer&gt;</small></span>
     </div>
@@ -132,15 +141,25 @@
     <table>
       <tr><th>부품</th><th>index.html에 있나?</th><th>위치</th></tr>
       <tr><td>헤더</td><td class="yes">있음</td><td>맨 위 주황색 카드</td></tr>
-      <tr><td>카드</td><td class="yes">있음 (5개)</td><td>특산물 section · 맛 이야기 article · 제철 달력 aside · 사진 검색 section (+ footer)</td></tr>
-      <tr><td>버튼</td><td class="yes">있음 (4개)</td><td>좋아요, 검색, 🧭 반응형 메뉴(둥근 링크), 💬 에이전트와 채팅</td></tr>
-      <tr><td>입력창</td><td class="yes">있음 (1개)</td><td>사진 검색 카드 안 검색어 input</td></tr>
-      <tr><td>탭</td><td class="no">없음</td><td>메뉴는 같은 페이지 안 위치로 이동하는 링크일 뿐, 화면을 바꾸는 탭은 아님</td></tr>
+      <tr><td>카드</td><td class="yes">있음 (3개)</td><td>탭이 들어 있는 section · 맛 이야기 article · 제철 달력 aside (+ header · nav · footer)</td></tr>
+      <tr><td>버튼</td><td class="yes">있음 (6개)</td><td>탭 버튼 2개, 좋아요, 검색(사진 검색 탭 안), 🧭 반응형 메뉴(둥근 링크), 💬 에이전트와 채팅</td></tr>
+      <tr><td>입력창</td><td class="yes">있음 (1개)</td><td>사진 검색 탭 안 검색어 input</td></tr>
+      <tr><td>탭</td><td class="yes">있음 (2개)</td><td>section 맨 위의 「🛒 대표 특산물」 · 「🖼️ 사진 검색」 — 누르면 같은 칸 안에서 화면이 바뀜</td></tr>
       <tr><td>목록</td><td class="yes">있음</td><td>article의 ul/li 3개, aside의 ul/li 4개 (nav 링크 4개는 목록 태그가 아닌 a)</td></tr>
     </table>
   </div>
 
   <script>
+    // 탭 흉내: 누르면 해당 화면만 보인다 (index.html의 탭과 같은 동작)
+    for (const [t, p] of [['mt1', 'mp1'], ['mt2', 'mp2']]) {
+      document.getElementById(t).addEventListener('click', () => {
+        for (const [t2, p2] of [['mt1', 'mp1'], ['mt2', 'mp2']]) {
+          document.getElementById(t2).setAttribute('aria-selected', t2 === t);
+          document.getElementById(p2).hidden = p2 !== p;
+        }
+      });
+    }
+
     let n = 0;
     document.getElementById('like').addEventListener('click', () => {
       n++;
