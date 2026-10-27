@@ -2,3 +2,6 @@
 .env
 .env*.local
 .vercel
+
+# 미리보기 서버 설정 (내 컴퓨터 경로가 들어 있음)
+.claude/

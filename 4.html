@@ -19,22 +19,27 @@
         function mod(a,b){
             return a%b
         }
+        // 결과를 콘솔(F12)과 화면 아래 글자 칸에 함께 보여준다
+        function show(value){
+            console.log(value);
+            document.getElementById("result").textContent = "결과: " + value;
+        }
         // head 안에서는 body가 아직 없으므로, 문서가 다 읽힌 뒤에 버튼에 이벤트를 연결한다.
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('button#a').addEventListener('mouseover', function () {
-                console.log(plus(4, 6));
+                show(plus(4, 6));
             });
             document.querySelector('button#b').addEventListener('mouseover', function () {
-                console.log(minus(4, 6));
+                show(minus(4, 6));
             });
             document.querySelector('button#c').addEventListener('mouseover', function () {
-                console.log(mul(4, 6));
+                show(mul(4, 6));
             });
             document.querySelector('button#d').addEventListener('mouseover', function () {
-                console.log(div(4, 6));
+                show(div(4, 6));
             });
             document.querySelector('button#e').addEventListener('mouseover', function () {
-                console.log(mod(4, 6));
+                show(mod(4, 6));
             });
         });
     </script>
@@ -52,6 +57,7 @@
     <button id="c">곱셈</button>
     <button id="d">나눗셈</button>
     <button id="e">나머지</button>
+    <p id="result">버튼 위로 마우스를 올려 보세요</p>
 
 
 

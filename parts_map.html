@@ -10,66 +10,52 @@
     h1 { font-size: 1.3rem; text-align: center; margin: 0 0 .3rem; }
     .sub { text-align: center; color: #666; font-size: .9rem; margin-bottom: 1.5rem; }
 
-    .item { display: flex; align-items: center; gap: .8rem; max-width: 900px; margin: 0 auto 1rem; }
-    .item > .mock { flex: 1; min-width: 0; outline: 2px dashed #e0457b; outline-offset: 4px; }
+    .wrap { max-width: 900px; margin: 0 auto; }
+    .item { display: flex; align-items: center; gap: .8rem; margin-bottom: 1rem; }
+    .item > .mock { flex: 1; min-width: 0; outline: 2px dashed #e0457b; outline-offset: 4px; border-radius: 4px; }
     .tag { flex: 0 0 150px; background: #e0457b; color: #fff; font-size: .8rem; padding: .35rem .7rem; border-radius: 999px; line-height: 1.3; }
     .tag small { display: block; opacity: .85; font-size: .7rem; }
     .tag::before { content: "◀ "; }
     .tag.blue { background: #2a6df4; }
     .tag.green { background: #1a8a3c; }
 
-    /* index.html 부품 모양 재현: 헤더 · 내비 · 바디 · 푸터가 각각 카드 */
-    .m-header, .m-nav, .m-card, .m-article, .m-aside, .m-footer { border-radius: 16px; box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+    /* index.html 부품 모양 재현 (제주 특산물 홍보관) */
+    .m-header { background: linear-gradient(135deg, #ff9f1c, #ff7b00); color: #fff; text-align: center; padding: 1.4rem 1rem; border-radius: 12px; }
+    .m-header h3 { margin: 0 0 .3rem; font-size: 1.3rem; }
+    .m-header p { margin: 0; font-size: .85rem; }
+    .m-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; background: #fff; padding: .6rem; border-radius: 12px; }
+    .m-nav a { background: #e6f3e8; color: #2f6f3e; font-weight: bold; font-size: .85rem; padding: .4rem .9rem; border-radius: 999px; outline: 2px dashed #1a8a3c; outline-offset: 2px; }
+    .m-card { background: #fff; border-radius: 12px; padding: 1rem 1.2rem; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+    .m-card h4 { margin: 0 0 .6rem; color: #2f6f3e; }
+    .m-card p, .m-card li { margin: .2rem 0; font-size: .85rem; }
+    .m-card ul { margin: 0; padding-left: 1.2rem; }
+    .m-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+    .m-grid div { border: 1px solid #e3ebe2; border-radius: 8px; background: #fbfdfb; padding: .5rem; font-size: .8rem; }
+    .m-like { width: 100%; border: 0; background: #ffe3e8; color: #d6336c; padding: .5rem; border-radius: 999px; font-size: .95rem; cursor: pointer; }
+    .m-search { display: flex; gap: .5rem; margin-bottom: .5rem; }
+    .m-search input { flex: 1; min-width: 0; padding: .5rem .7rem; border: 1px solid #c9d1d9; border-radius: 8px; font-size: .9rem; }
+    .m-search button { padding: .5rem 1rem; border: 0; border-radius: 8px; background: #2f6f3e; color: #fff; cursor: pointer; }
+    .m-photo { height: 90px; border-radius: 10px; background: #dde3ea; display: flex; align-items: center; justify-content: center; color: #667; font-size: .85rem; }
+    .m-footer { background: #2f6f3e; color: #e6f3e8; text-align: center; padding: 1rem; border-radius: 12px; font-size: .85rem; }
+    .m-float { display: flex; gap: 1rem; align-items: center; justify-content: center; padding: .8rem; border-radius: 12px; background: #fff; }
+    .m-round { width: 84px; height: 84px; border-radius: 50%; background: #1f3a5f; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: .75rem; font-weight: bold; text-align: center; line-height: 1.3; }
+    .m-chatbtn { border-radius: 999px; background: #ff7b00; color: #fff; padding: .6rem 1rem; font-weight: bold; font-size: .85rem; }
+    .pair { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; align-items: start; margin-bottom: 1rem; }
+    .pair .item { margin-bottom: 0; flex-direction: column; align-items: stretch; }
+    .pair .item .tag { flex: none; align-self: flex-start; }
+    .pair .item .tag::before { content: "▲ "; }
+    .box-out { outline: 2px dashed #2a6df4; outline-offset: 3px; border-radius: 6px; }
 
-    /* 왼쪽: section 위, article 아래 / 오른쪽: aside 가 두 줄을 차지 */
-    .layout { display: grid; grid-template-columns: 2fr 1fr; grid-template-areas: "section aside" "article aside"; gap: 1.2rem; align-items: start; max-width: 900px; margin: 0 auto 1rem; }
-    .layout > .item { margin: 0; max-width: none; }
-    .a-section { grid-area: section; }
-    .a-article { grid-area: article; }
-    .side { grid-area: aside; flex-direction: column; align-items: stretch; position: sticky; top: 1rem; }
-    .side > .tag { flex: none; }
-    .side > .tag::before { content: "▲ "; }
-    .m-header { background: linear-gradient(135deg, #ff7a00, #ffa940); color: #fff; padding: 1.5rem 1rem; text-align: center; }
-    .m-header h3 { margin: 0; font-size: 1.4rem; }
-    .m-header p { margin: .4rem 0 0; font-size: .85rem; opacity: .9; }
-    .m-nav { background: #333; }
-    .m-nav ul { display: flex; justify-content: center; gap: .6rem; list-style: none; margin: 0; padding: .6rem 1rem; }
-    .m-nav li { outline: 2px dashed #1a8a3c; outline-offset: 2px; border-radius: 999px; }
-    .m-nav a { display: block; padding: .45rem 1rem; border-radius: 999px; color: #fff; text-decoration: none; }
-    .m-article { background: #fff; padding: 1rem; }
-    .m-article .item { max-width: none; flex-direction: column; align-items: stretch; }
-    .m-article .tag { flex: none; align-self: flex-start; }
-    .m-article .tag::before { content: "▲ "; }
-    .m-article .item:last-child { margin-bottom: 0; }
-    .m-aside { background: #fff; padding: 1.2rem; }
-    .m-aside h4 { margin: 0 0 .8rem; color: #ff7a00; }
-    .m-aside ol { margin: 0 0 .8rem; padding: .3rem .3rem .3rem 1.6rem; line-height: 1.9; font-size: .9rem; outline: 2px dashed #1a8a3c; outline-offset: 2px; border-radius: 4px; }
-    .m-aside .tag { display: block; }
-    .m-aside .tag::before { content: "▲ "; }
-    .m-card { background: #fff; padding: 1.5rem; text-align: center; }
-    .m-promo { background: #fff8f0; border: 1px solid #ffe0c2; border-radius: 12px; }
-    .m-card h4 { margin: 0 0 .4rem; }
-    .m-card p { margin: 0 0 .8rem; color: #666; font-size: .9rem; }
-    .m-num { font-size: 3rem; margin-bottom: .5rem; }
-    .m-card button { font-size: 1.1rem; padding: .5rem 1.4rem; cursor: pointer; }
-    .m-promo { padding: 1.2rem 1.5rem; }
-    .m-promo h2 { margin: 0 0 .6rem; font-size: 1.1rem; color: #ff7a00; }
-    .m-promo p { margin: .25rem 0; font-size: .9rem; line-height: 1.6; }
-    .m-footer { background: #333; color: #ccc; text-align: center; padding: 1rem; font-size: .85rem; }
-
-    table { max-width: 900px; margin: 2rem auto 0; border-collapse: collapse; background: #fff; width: 100%; }
+    table { margin: 2rem auto 0; border-collapse: collapse; background: #fff; width: 100%; }
     th, td { border: 1px solid #ddd; padding: .5rem .8rem; text-align: left; font-size: .9rem; }
     .yes { color: #1a8a3c; font-weight: bold; }
     .no { color: #999; }
     @media (max-width: 720px) {
-      .layout { grid-template-columns: 1fr; grid-template-areas: "section" "aside" "article"; }
-      .side { position: static; }
-    }
-    @media (max-width: 600px) {
       .item { flex-direction: column; align-items: stretch; }
-      .tag { flex: none; }
+      .tag { flex: none; align-self: flex-start; }
       .tag::before { content: "▲ "; }
-      .m-nav a { padding: .45rem .7rem; }
+      .pair { grid-template-columns: 1fr; }
+      .m-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -77,254 +63,88 @@
   <h1>🧩 index.html 화면 부품 지도</h1>
   <div class="sub">점선 = 실제 화면 부품 · 위에서 아래 순서는 index.html과 같습니다 (버튼은 클릭됩니다)</div>
 
-  <div class="item">
-    <div class="mock m-header">
-      <h3>🍊 내 취향 카드</h3>
-      <p>좋아하는 것을 눌러서 모아보세요</p>
+  <div class="wrap">
+    <div class="item">
+      <div class="mock m-header"><h3>🍊 제주 특산물 홍보관</h3><p>바람과 햇살, 바다가 키운 제주의 맛을 만나보세요</p></div>
+      <span class="tag">헤더<small>&lt;header&gt;</small></span>
     </div>
-    <span class="tag">헤더<small>&lt;header&gt;</small></span>
-  </div>
 
-  <div class="item">
-    <div class="mock m-nav">
-      <ul><li><a>홈</a></li><li><a>내 취향</a></li><li><a>소개</a></li></ul>
+    <div class="item">
+      <div class="mock m-nav"><a>🛒 대표 특산물</a><a>📖 제주의 맛 이야기</a><a>📅 제철 달력</a><a>🖼️ 사진 검색</a></div>
+      <span class="tag green">목록<small>&lt;nav&gt; 링크 4개</small></span>
     </div>
-    <span class="tag green">목록<small>&lt;nav&gt;&lt;ul&gt;&lt;li&gt; 메뉴 3개</small></span>
-  </div>
 
-  <div class="layout">
-      <div class="item a-section">
+    <div class="pair">
+      <div>
+        <div class="item" style="margin-bottom:1rem">
+          <div class="mock m-card">
+            <h4>🛒 대표 특산물</h4>
+            <div class="m-grid"><div>🍊 감귤</div><div>🍋 한라봉</div><div>🐖 흑돼지</div><div>🐟 갈치</div><div>🍡 오메기떡</div><div>🥜 당근·감자·마늘</div></div>
+          </div>
+          <span class="tag">카드<small>&lt;section&gt; 특산물 6개</small></span>
+        </div>
+        <div class="item">
+          <div class="mock m-card">
+            <h4>📖 제주의 맛 이야기</h4>
+            <p>화산섬 제주의 토양과 따뜻한 바닷바람은…</p>
+            <ul><li>제철 시기를 확인하면 가장 맛있을 때…</li><li>선물용은 포장과 배송 기간을…</li></ul>
+          </div>
+          <span class="tag green">카드 · 목록<small>&lt;article&gt; ul/li 3개</small></span>
+        </div>
+      </div>
+
+      <div class="item">
         <div class="mock m-card">
-          <h4>좋아요 카운터</h4>
-          <p>버튼을 누를 때마다 2씩 올라가요</p>
-          <div class="m-num" id="count">0</div>
-          <span style="outline:2px dashed #2a6df4;outline-offset:5px;border-radius:4px;display:inline-block">
-            <button id="btn">+2</button>
-          </span>
-          <span class="tag blue" style="margin-left:1rem;display:inline-block;vertical-align:middle">버튼<small>button#btn</small></span>
+          <h4>📅 제철 달력</h4>
+          <ul><li>🍊 11~1월 : 감귤</li><li>🍋 1~4월 : 한라봉</li><li>🐟 7~10월 : 갈치</li><li>🍡 연중 : 오메기떡</li></ul>
+          <p style="margin-top:.7rem"><span class="box-out" style="display:block"><button class="m-like" id="like">❤️ 좋아요 <span id="likeN">0</span></button></span></p>
         </div>
-        <span class="tag">카드<small>&lt;section&gt; 카운터</small></span>
+        <span class="tag">카드<small>&lt;aside&gt; 제철 달력</small></span>
+        <span class="tag blue">버튼<small>button#likeBtn</small></span>
       </div>
+    </div>
 
-      <div class="item a-article">
-        <div class="mock m-article">
-
-
-      <div class="item">
-        <div class="mock m-promo">
-            <h2>🌋 제주대학교에 오신 것을 환영합니다</h2>
-            <p>삼다도 제주의 중심에서 꿈을 키우는 대학, 제주대학교입니다.</p>
-            <p>한라산의 기상과 푸른 바다의 포용력을 닮은 인재를 길러냅니다.</p>
-            <p>제주의 자연과 문화를 품고 세계로 나아가는 국립대학입니다.</p>
-            <p>지역과 함께 성장하며 미래를 열어가는 열린 배움터입니다.</p>
-            <p>여러분의 첫걸음을 제주대학교가 힘껏 응원합니다.</p>
-            <p>제주에서 시작하는 배움, 세계로 뻗어가는 도전을 응원합니다.</p>
-            <p>한 사람 한 사람의 가능성을 소중하게 키우는 대학입니다.</p>
-            <p>따뜻한 공동체 안에서 함께 배우고 함께 성장합니다.</p>
-            <p>청춘의 가장 빛나는 시간을 제주에서 만나보세요.</p>
-            <p>당신의 이야기가 제주대학교에서 새로운 장을 엽니다.</p>
+    <div class="item">
+      <div class="mock m-card">
+        <h4>🖼️ 제주 사진 검색</h4>
+        <div class="m-search">
+          <span class="box-out" style="flex:1;display:flex"><input placeholder="검색어 입력 (예: jeju, tangerine)"></span>
+          <span class="box-out" style="display:flex"><button>검색</button></span>
         </div>
-        <span class="tag">카드<small>section.promo 1/10</small></span>
+        <div class="m-photo">사진이 0.5초마다 한 장씩 넘어가요</div>
       </div>
+      <span class="tag">카드<small>&lt;section&gt; 사진 검색</small></span>
+    </div>
 
-      <div class="item">
-        <div class="mock m-promo">
-            <h2>🎓 교육 목표</h2>
-            <p>창의적 사고로 문제를 해결하는 인재를 기릅니다.</p>
-            <p>깊이 있는 전공 지식과 넓은 교양을 함께 쌓습니다.</p>
-            <p>스스로 질문하고 답을 찾는 힘을 길러줍니다.</p>
-            <p>책임감과 배려를 갖춘 시민으로 성장하도록 돕습니다.</p>
-            <p>변화하는 사회에 유연하게 대응하는 역량을 키웁니다.</p>
-            <p>토론과 협업을 통해 소통하는 능력을 갖추게 합니다.</p>
-            <p>현장에서 바로 쓰이는 실무 감각을 익히도록 지원합니다.</p>
-            <p>배움을 삶 속에서 실천하는 사람을 만듭니다.</p>
-            <p>도전을 두려워하지 않는 용기를 응원합니다.</p>
-            <p>모두가 존중받는 배움의 문화를 만들어갑니다.</p>
-        </div>
-        <span class="tag">카드<small>section.promo 2/10</small></span>
-      </div>
+    <div class="item">
+      <div class="mock m-footer">© 2026 제주 특산물 홍보관</div>
+      <span class="tag">푸터<small>&lt;footer&gt;</small></span>
+    </div>
 
-      <div class="item">
-        <div class="mock m-promo">
-            <h2>📚 다양한 학문의 터전</h2>
-            <p>인문, 사회, 자연, 공학, 의생명 등 폭넓은 분야를 배울 수 있습니다.</p>
-            <p>전공의 경계를 넘나드는 융합 학습의 기회를 제공합니다.</p>
-            <p>열정 있는 교수진이 학생 곁에서 길잡이가 되어줍니다.</p>
-            <p>소규모 수업과 실습 중심 교육으로 깊이를 더합니다.</p>
-            <p>연구와 교육이 함께 어우러지는 학문 공동체입니다.</p>
-            <p>학생이 주도하는 프로젝트와 연구 활동을 격려합니다.</p>
-            <p>다양한 전공 선택으로 나만의 진로를 설계할 수 있습니다.</p>
-            <p>학문에 대한 호기심이 자유롭게 펼쳐지는 곳입니다.</p>
-            <p>이론과 실습이 균형을 이루는 알찬 교과과정을 운영합니다.</p>
-            <p>배움의 즐거움을 발견하는 시간이 이어집니다.</p>
-        </div>
-        <span class="tag">카드<small>section.promo 3/10</small></span>
+    <div class="item">
+      <div class="mock m-float">
+        <span class="m-round"><span style="font-size:1.4rem">🧭</span>반응형<br>메뉴</span>
+        <span class="m-chatbtn">💬 에이전트와 채팅</span>
       </div>
+      <span class="tag blue">버튼 2개<small>화면 아래에 떠 있음</small></span>
+    </div>
 
-      <div class="item">
-        <div class="mock m-promo">
-            <h2>🏝️ 제주만의 특별한 캠퍼스</h2>
-            <p>눈을 들면 한라산이, 가까이에는 푸른 바다가 펼쳐집니다.</p>
-            <p>사계절 변하는 풍경 속에서 걷는 캠퍼스 길은 늘 새롭습니다.</p>
-            <p>봄에는 꽃길, 여름에는 푸른 숲, 가을에는 단풍, 겨울에는 고요함이 있습니다.</p>
-            <p>자연과 가까이 지내며 마음의 여유를 되찾을 수 있습니다.</p>
-            <p>공부하다 쉬어가기 좋은 산책로와 쉼터가 있습니다.</p>
-            <p>제주의 바람과 햇살이 함께하는 쾌적한 학습 환경입니다.</p>
-            <p>도서관과 강의실, 실습 공간이 가까워 이동이 편리합니다.</p>
-            <p>친구들과 이야기 나누기 좋은 열린 공간이 곳곳에 있습니다.</p>
-            <p>제주의 감성이 담긴 캠퍼스에서 일상이 여행이 됩니다.</p>
-            <p>이곳에서의 하루하루가 오래 남는 추억이 됩니다.</p>
-        </div>
-        <span class="tag">카드<small>section.promo 4/10</small></span>
-      </div>
-
-      <div class="item">
-        <div class="mock m-promo">
-            <h2>🔬 연구와 혁신</h2>
-            <p>지역의 문제를 해결하는 연구로 사회에 기여합니다.</p>
-            <p>제주의 자연환경과 해양, 농업 분야 연구를 이어갑니다.</p>
-            <p>새로운 기술과 아이디어가 꽃피는 연구 환경을 만듭니다.</p>
-            <p>학부생도 연구에 참여하며 전문성을 키울 수 있습니다.</p>
-            <p>산업체와 협력해 현장과 연결된 연구를 추진합니다.</p>
-            <p>창업을 꿈꾸는 학생에게 아이디어를 실현할 기회를 엽니다.</p>
-            <p>지속가능한 미래를 위한 연구에 앞장섭니다.</p>
-            <p>데이터와 기술로 지역과 세계의 과제를 풀어갑니다.</p>
-            <p>호기심에서 시작된 질문이 혁신으로 이어집니다.</p>
-            <p>연구의 성과가 우리 삶을 더 나은 방향으로 이끕니다.</p>
-        </div>
-        <span class="tag">카드<small>section.promo 5/10</small></span>
-      </div>
-
-      <div class="item">
-        <div class="mock m-promo">
-            <h2>🤝 지역과 함께하는 대학</h2>
-            <p>제주도민과 함께 호흡하는 지역 거점 국립대학입니다.</p>
-            <p>지역사회와 협력하여 상생의 가치를 실천합니다.</p>
-            <p>봉사활동과 지역 연계 프로그램으로 나눔을 배웁니다.</p>
-            <p>제주의 전통과 문화를 소중히 이어가고 알립니다.</p>
-            <p>지역 인재가 지역에서 꿈을 펼칠 수 있도록 돕습니다.</p>
-            <p>평생교육으로 지역 주민의 배움도 응원합니다.</p>
-            <p>지역 산업과 연결된 현장 실습의 기회를 넓힙니다.</p>
-            <p>제주의 특산물과 문화를 연구하고 널리 알립니다.</p>
-            <p>대학이 지역의 자랑이 되고, 지역이 대학의 힘이 됩니다.</p>
-            <p>함께할 때 더 멀리 갈 수 있다는 믿음으로 걸어갑니다.</p>
-        </div>
-        <span class="tag">카드<small>section.promo 6/10</small></span>
-      </div>
-
-      <div class="item">
-        <div class="mock m-promo">
-            <h2>🌏 세계로 열린 배움</h2>
-            <p>해외 대학과의 교류로 시야를 넓힐 수 있습니다.</p>
-            <p>교환학생과 어학 프로그램으로 글로벌 경험을 쌓습니다.</p>
-            <p>다양한 나라의 학생들과 함께 배우는 환경입니다.</p>
-            <p>외국어 능력을 키울 수 있는 학습 기회를 마련합니다.</p>
-            <p>문화의 다름을 이해하고 존중하는 태도를 배웁니다.</p>
-            <p>국제 감각을 갖춘 인재로 성장하도록 지원합니다.</p>
-            <p>제주에서 세계를 만나고 세계에서 제주를 알립니다.</p>
-            <p>넓은 세상을 향한 도전을 학교가 함께 준비합니다.</p>
-            <p>글로벌 무대에서 활약할 꿈을 키워보세요.</p>
-            <p>세계와 소통하는 첫 시작이 이곳에 있습니다.</p>
-        </div>
-        <span class="tag">카드<small>section.promo 7/10</small></span>
-      </div>
-
-      <div class="item">
-        <div class="mock m-promo">
-            <h2>🎉 활기찬 캠퍼스 라이프</h2>
-            <p>동아리와 학생 활동으로 대학 생활이 더욱 풍성해집니다.</p>
-            <p>축제 기간에는 캠퍼스 전체가 웃음과 열기로 가득합니다.</p>
-            <p>운동, 음악, 봉사, 학술 등 취향에 맞는 활동을 만날 수 있습니다.</p>
-            <p>선후배가 서로 이끌어주는 따뜻한 문화가 있습니다.</p>
-            <p>친구들과 함께 웃고 성장하는 시간이 쌓입니다.</p>
-            <p>다양한 행사와 특강이 배움의 폭을 넓혀줍니다.</p>
-            <p>학생 복지와 상담 지원으로 안정적인 학교생활을 돕습니다.</p>
-            <p>장학 제도로 학업에 집중할 수 있도록 응원합니다.</p>
-            <p>공부와 휴식이 조화를 이루는 즐거운 일상입니다.</p>
-            <p>청춘의 열정이 캠퍼스를 가득 채웁니다.</p>
-        </div>
-        <span class="tag">카드<small>section.promo 8/10</small></span>
-      </div>
-
-      <div class="item">
-        <div class="mock m-promo">
-            <h2>🚀 졸업 후의 길</h2>
-            <p>진로 상담과 취업 지원으로 미래 설계를 돕습니다.</p>
-            <p>선배들의 경험을 나누는 멘토링 기회를 마련합니다.</p>
-            <p>공공, 교육, 연구, 산업 등 다양한 분야로 진출을 응원합니다.</p>
-            <p>자격증과 실무 역량 강화를 위한 프로그램을 운영합니다.</p>
-            <p>창업을 꿈꾸는 학생에게 든든한 지원군이 되어줍니다.</p>
-            <p>졸업 후에도 이어지는 동문 네트워크가 힘이 됩니다.</p>
-            <p>배운 것을 사회에 환원하는 인재로 성장하길 바랍니다.</p>
-            <p>어디에서든 제주대학교의 이름으로 당당하게 서세요.</p>
-            <p>지금의 노력이 내일의 가능성이 됩니다.</p>
-            <p>여러분의 미래를 제주대학교가 함께 만들어갑니다.</p>
-        </div>
-        <span class="tag">카드<small>section.promo 9/10</small></span>
-      </div>
-
-      <div class="item">
-        <div class="mock m-promo">
-            <h2>💌 입학을 기다리며</h2>
-            <p>꿈을 향해 나아갈 용기만 있다면 충분합니다.</p>
-            <p>제주대학교는 열린 마음으로 여러분을 맞이합니다.</p>
-            <p>배움과 성장, 그리고 따뜻한 사람들이 기다리고 있습니다.</p>
-            <p>한라산 아래에서 펼쳐질 여러분의 이야기를 기대합니다.</p>
-            <p>새로운 시작 앞에서 설레는 모든 분을 응원합니다.</p>
-            <p>제주의 바람처럼 자유롭게, 한라산처럼 굳건하게.</p>
-            <p>오늘의 선택이 빛나는 내일로 이어지길 바랍니다.</p>
-            <p>함께 걸으며 더 큰 꿈을 이루어가요.</p>
-            <p>제주대학교에서 당신의 가능성을 마음껏 펼치세요.</p>
-            <p>제주대학교, 당신의 꿈이 시작되는 곳. 🍊</p>
-        </div>
-        <span class="tag">카드<small>section.promo 10/10</small></span>
-      </div>
-        </div>
-        <span class="tag">카드<small>&lt;article&gt; · 홍보 문구 100줄</small></span>
-      </div>
-
-      <div class="item side">
-        <div class="mock m-aside">
-          <h4>📌 바로가기</h4>
-          <ol>
-            <li>🌋 환영합니다</li>
-            <li>🎓 교육 목표</li>
-            <li>📚 다양한 학문의 터전</li>
-            <li>🏝️ 제주만의 캠퍼스</li>
-            <li>🔬 연구와 혁신</li>
-            <li>🤝 지역과 함께하는 대학</li>
-            <li>🌏 세계로 열린 배움</li>
-            <li>🎉 캠퍼스 라이프</li>
-            <li>🚀 졸업 후의 길</li>
-            <li>💌 입학을 기다리며</li>
-          </ol>
-          <span class="tag green">목록<small>&lt;ol&gt;&lt;li&gt; 10개</small></span>
-        </div>
-        <span class="tag">카드<small>&lt;aside&gt; 바로가기</small></span>
-      </div>
+    <table>
+      <tr><th>부품</th><th>index.html에 있나?</th><th>위치</th></tr>
+      <tr><td>헤더</td><td class="yes">있음</td><td>맨 위 주황색 카드</td></tr>
+      <tr><td>카드</td><td class="yes">있음 (5개)</td><td>특산물 section · 맛 이야기 article · 제철 달력 aside · 사진 검색 section (+ footer)</td></tr>
+      <tr><td>버튼</td><td class="yes">있음 (4개)</td><td>좋아요, 검색, 🧭 반응형 메뉴(둥근 링크), 💬 에이전트와 채팅</td></tr>
+      <tr><td>입력창</td><td class="yes">있음 (1개)</td><td>사진 검색 카드 안 검색어 input</td></tr>
+      <tr><td>탭</td><td class="no">없음</td><td>메뉴는 같은 페이지 안 위치로 이동하는 링크일 뿐, 화면을 바꾸는 탭은 아님</td></tr>
+      <tr><td>목록</td><td class="yes">있음</td><td>article의 ul/li 3개, aside의 ul/li 4개 (nav 링크 4개는 목록 태그가 아닌 a)</td></tr>
+    </table>
   </div>
-
-  <div class="item">
-    <div class="mock m-footer">© 2026 내 취향 카드</div>
-    <span class="tag">푸터<small>&lt;footer&gt;</small></span>
-  </div>
-
-  <table>
-    <tr><th>부품</th><th>index.html에 있나?</th><th>위치</th></tr>
-    <tr><td>헤더</td><td class="yes">있음</td><td>맨 위 주황색 카드</td></tr>
-    <tr><td>카드</td><td class="yes">있음 (13개)</td><td>section 카운터 1 + article 1 + aside 1 + article 안 홍보 카드 10 (헤더·내비·푸터도 카드 모양)</td></tr>
-    <tr><td>버튼</td><td class="yes">있음 (1개)</td><td>카운터 카드 안 +2 버튼</td></tr>
-    <tr><td>입력창</td><td class="no">없음</td><td>input / textarea 없음</td></tr>
-    <tr><td>탭</td><td class="no">없음</td><td>메뉴는 같은 페이지 안 위치로 이동하는 링크일 뿐, 화면을 바꾸는 탭은 아님</td></tr>
-    <tr><td>목록</td><td class="yes">있음</td><td>내비게이션 메뉴의 ul/li 3개 + aside 바로가기 ol/li 10개 (홍보 문구는 목록이 아닌 p 문단)</td></tr>
-  </table>
 
   <script>
-    let count = 0;
-    const countEl = document.getElementById('count');
-    document.getElementById('btn').addEventListener('click', () => {
-      count += 2;
-      countEl.textContent = count;
+    let n = 0;
+    document.getElementById('like').addEventListener('click', () => {
+      n++;
+      document.getElementById('likeN').textContent = n;
     });
   </script>
 </body>
