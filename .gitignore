@@ -1,0 +1,4 @@
+# API key 같은 비밀 값이 GitHub에 올라가지 않도록
+.env
+.env*.local
+.vercel

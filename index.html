@@ -20,7 +20,7 @@
       color: #222;
     }
     /* header · nav · section · article · aside · footer 를 각각 하나의 카드로 */
-    header, nav, section.card, article, aside, footer {
+    header, nav, section.card, .gallery, article, aside, footer {
       border-radius: 16px;
       box-shadow: 0 4px 14px rgba(0, 0, 0, .08);
     }
@@ -61,6 +61,7 @@
       grid-template-columns: 2fr 1fr;
       grid-template-areas:
         "section aside"
+        "gallery aside"
         "article aside";
       gap: 1rem;
       align-items: start;
@@ -118,10 +119,36 @@
       font-size: .85rem;
     }
     footer p { margin: 0; }
+    /* 이미지 검색 슬라이드 (Pixabay) */
+    .gallery { grid-area: gallery; min-width: 0; background: #fff; padding: 1.2rem; scroll-margin-top: 5rem; }
+    .gallery h2 { margin: 0 0 .3rem; font-size: 1.2rem; }
+    .gallery > p { margin: 0 0 .8rem; color: #666; font-size: .9rem; }
+    .g-form { display: flex; gap: .5rem; }
+    .g-form input { flex: 1; min-width: 0; padding: .6rem .8rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 8px; }
+    .g-btn { padding: .6rem 1rem; font-size: 1rem; border: 0; border-radius: 8px; background: #ff7a00; color: #fff; }
+    .g-btn.dark { background: #333; }
+    .g-btn:disabled { background: #ccc; cursor: default; }
+    #g-status { min-height: 1.4em; margin: .6rem 0; font-size: .85rem; color: #666; }
+    #g-status.error { color: #d0302f; }
+    .g-slider { position: relative; overflow: hidden; border-radius: 12px; background: #222; }
+    .g-track { display: flex; transition: transform .4s ease; }
+    .g-slide { flex: 0 0 100%; margin: 0; }
+    .g-slide img { display: block; width: 100%; height: 320px; object-fit: contain; background: #111; }
+    .g-slide figcaption { padding: .6rem 1rem; font-size: .85rem; color: #ddd; }
+    .g-slide figcaption a { color: #ffa940; }
+    .g-arrow { position: absolute; top: 140px; width: 2.6rem; height: 2.6rem; padding: 0; border-radius: 50%; background: rgba(0, 0, 0, .55); font-size: 1.3rem; }
+    .g-arrow.prev { left: .6rem; }
+    .g-arrow.next { right: .6rem; }
+    .g-counter { position: absolute; top: .6rem; right: .6rem; padding: .2rem .6rem; border-radius: 999px; background: rgba(0, 0, 0, .55); color: #fff; font-size: .8rem; }
+    .g-dots { display: flex; justify-content: center; gap: .4rem; padding: 0 .6rem .7rem; }
+    .g-dots button { width: .7rem; height: .7rem; padding: 0; border: 0; border-radius: 50%; background: #666; }
+    .g-dots button.on { background: #ff7a00; }
+    .g-pager { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-top: .8rem; font-size: .9rem; color: #666; }
+    [hidden] { display: none !important; }
     @media (max-width: 720px) {
       main {
         grid-template-columns: 1fr;
-        grid-template-areas: "section" "aside" "article";
+        grid-template-areas: "section" "gallery" "aside" "article";
       }
       aside { position: static; }
     }
@@ -141,6 +168,7 @@
     <ul>
       <li><a href="#home">홈</a></li>
       <li><a href="#like">내 취향</a></li>
+      <li><a href="#gallery">이미지</a></li>
       <li><a href="#about">소개</a></li>
     </ul>
   </nav>
@@ -151,6 +179,28 @@
       <p>버튼을 누를 때마다 2씩 올라가요</p>
       <div id="count">0</div>
       <button id="btn">+2</button>
+    </section>
+
+    <section class="gallery" id="gallery">
+      <h2>🖼️ 이미지 검색 슬라이드</h2>
+      <p>검색어를 입력하면 Pixabay 이미지를 10개씩 넘겨 볼 수 있어요</p>
+      <form class="g-form" id="g-form">
+        <input id="g-query" type="search" placeholder="예: 제주 바다, 감귤, 한라산" maxlength="100" required>
+        <button type="submit" class="g-btn">검색</button>
+      </form>
+      <p id="g-status"></p>
+      <div class="g-slider" id="g-slider" hidden>
+        <div class="g-track" id="g-track"></div>
+        <button class="g-btn g-arrow prev" id="g-prev" aria-label="이전 이미지">‹</button>
+        <button class="g-btn g-arrow next" id="g-next" aria-label="다음 이미지">›</button>
+        <span class="g-counter" id="g-counter"></span>
+        <div class="g-dots" id="g-dots"></div>
+      </div>
+      <div class="g-pager" id="g-pager" hidden>
+        <button class="g-btn dark" id="g-prev-page">◀ 이전 10개</button>
+        <span id="g-page-info"></span>
+        <button class="g-btn dark" id="g-next-page">다음 10개 ▶</button>
+      </div>
     </section>
 
     <article id="about">
@@ -322,6 +372,108 @@
     document.getElementById('btn').addEventListener('click', () => {
       count += 2;
       countEl.textContent = count;
+    });
+  </script>
+
+  <script>
+    // 이미지 검색 슬라이드: key는 서버(/api/pixabay)가 Vercel 환경변수에서 꺼내 쓰고, 화면 코드에는 없습니다
+    const PER_PAGE = 10;
+    const g = (id) => document.getElementById(id);
+    const gallery = { query: '', page: 1, totalHits: 0, hits: [], index: 0 };
+
+    function setGalleryStatus(text, isError = false) {
+      g('g-status').textContent = text;
+      g('g-status').classList.toggle('error', isError);
+    }
+
+    async function searchImages(query, page) {
+      setGalleryStatus('불러오는 중…');
+      // 불러오는 동안 묶음 버튼을 여러 번 눌러 요청이 겹치지 않게
+      g('g-prev-page').disabled = g('g-next-page').disabled = true;
+      try {
+        const res = await fetch(`/api/pixabay?${new URLSearchParams({ q: query, page })}`);
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || `요청 실패 (${res.status})`);
+        if (data.hits.length === 0) {
+          g('g-slider').hidden = g('g-pager').hidden = true;
+          setGalleryStatus(`"${query}" 검색 결과가 없어요.`);
+          return;
+        }
+        Object.assign(gallery, { query, page, totalHits: data.totalHits, hits: data.hits, index: 0 });
+        renderGallery();
+        setGalleryStatus(`"${query}" 이미지 ${data.totalHits.toLocaleString()}개 중 ${page}번째 묶음 · 이미지 제공: Pixabay`);
+      } catch (err) {
+        setGalleryStatus(err.message, true);
+        if (!g('g-pager').hidden) renderPager();
+      }
+    }
+
+    function renderPager() {
+      const lastPage = Math.ceil(gallery.totalHits / PER_PAGE);
+      g('g-page-info').textContent = `${gallery.page} / ${lastPage} 묶음`;
+      g('g-prev-page').disabled = gallery.page <= 1;
+      g('g-next-page').disabled = gallery.page >= lastPage;
+    }
+
+    function renderGallery() {
+      const track = g('g-track');
+      const dots = g('g-dots');
+      track.replaceChildren();
+      dots.replaceChildren();
+
+      gallery.hits.forEach((hit, i) => {
+        const fig = document.createElement('figure');
+        fig.className = 'g-slide';
+        const img = document.createElement('img');
+        img.src = hit.webformatURL;
+        img.alt = hit.tags;
+        img.loading = i === 0 ? 'eager' : 'lazy';
+        const cap = document.createElement('figcaption');
+        const link = document.createElement('a');
+        link.href = hit.pageURL;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = 'Pixabay에서 보기';
+        cap.append(`${hit.tags} · 📷 ${hit.user} · `, link);
+        fig.append(img, cap);
+        track.append(fig);
+
+        const dot = document.createElement('button');
+        dot.setAttribute('aria-label', `${i + 1}번째 이미지`);
+        dot.addEventListener('click', () => goToImage(i));
+        dots.append(dot);
+      });
+
+      renderPager();
+      g('g-slider').hidden = g('g-pager').hidden = false;
+      goToImage(0);
+    }
+
+    function goToImage(i) {
+      const n = gallery.hits.length;
+      gallery.index = (i + n) % n;   // 끝에서 다음을 누르면 처음으로
+      g('g-track').style.transform = `translateX(-${gallery.index * 100}%)`;
+      g('g-counter').textContent = `${gallery.index + 1} / ${n}`;
+      [...g('g-dots').children].forEach((d, k) => d.classList.toggle('on', k === gallery.index));
+    }
+
+    g('g-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      searchImages(g('g-query').value.trim(), 1);
+    });
+    g('g-prev').addEventListener('click', () => goToImage(gallery.index - 1));
+    g('g-next').addEventListener('click', () => goToImage(gallery.index + 1));
+    g('g-prev-page').addEventListener('click', () => searchImages(gallery.query, gallery.page - 1));
+    g('g-next-page').addEventListener('click', () => searchImages(gallery.query, gallery.page + 1));
+
+    // 휴대폰에서 손가락으로 밀어서 넘기기
+    let touchX = null;
+    g('g-slider').addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    g('g-slider').addEventListener('touchend', (e) => {
+      if (touchX === null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 40) goToImage(gallery.index + (dx < 0 ? 1 : -1));
+      touchX = null;
     });
   </script>
 </body>
