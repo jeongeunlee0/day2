@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <!-- 반응형의 첫걸음: 휴대폰이 화면을 PC 크기로 축소해 보여주지 않게 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반응형 웹 예제</title>
+  <style>
+    /* ===== 1. 기본(휴대폰) 스타일: 작은 화면부터 만들고 넓어질 때 덧붙이는 "모바일 우선" ===== */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f6f6f8;
+      color: #222;
+      line-height: 1.6;
+    }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #ff7a00, #ffa940);
+      color: #fff;
+    }
+    /* clamp(최소, 화면폭에 비례, 최대): 화면이 넓을수록 글자가 커지지만 한계는 지킨다 */
+    header h1 { margin: 0; font-size: clamp(1.2rem, 4vw, 2rem); }
+
+    /* 휴대폰에서는 메뉴를 접고 ☰ 버튼으로 연다 */
+    .menu-btn {
+      padding: .4rem .8rem;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      background: transparent;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    nav ul {
+      display: none;
+      flex-direction: column;
+      margin: .5rem 0 0;
+      padding: .5rem;
+      list-style: none;
+      border-radius: 12px;
+      background: #333;
+    }
+    nav.open ul { display: flex; }
+    nav a { display: block; padding: .6rem 1rem; border-radius: 8px; color: #fff; text-decoration: none; }
+    nav a:hover { background: #ff7a00; }
+
+    /* 지금 화면 상태 표시 */
+    .now {
+      margin: 1rem 0;
+      padding: .8rem 1rem;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      background: #e0457b;   /* 휴대폰 = 분홍 */
+    }
+    .now::after { content: " · 휴대폰 (600px 미만) 📱"; }
+
+    .layout { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+
+    /* 카드 목록: 휴대폰은 1줄에 1개 */
+    .cards { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    .card {
+      padding: 1.2rem;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+    }
+    .card .emoji { font-size: 2.5rem; }
+    .card h3 { margin: .3rem 0; }
+    .card p { margin: 0; color: #666; font-size: .9rem; }
+
+    aside {
+      padding: 1.2rem;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+    }
+    aside h2 { margin: 0 0 .6rem; font-size: 1.1rem; color: #ff7a00; }
+    aside table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    aside th, aside td { padding: .4rem; border-bottom: 1px solid #eee; text-align: left; }
+    aside tr.on { background: #fff3e6; font-weight: bold; }
+    pre {
+      overflow-x: auto;
+      margin: .8rem 0 0;
+      padding: .8rem;
+      border-radius: 8px;
+      background: #222;
+      color: #ffd8a8;
+      font-size: .8rem;
+    }
+
+    footer { margin-top: 1rem; padding: 1rem; border-radius: 12px; background: #333; color: #ccc; text-align: center; font-size: .85rem; }
+
+    /* ===== 2. 태블릿 (600px 이상) ===== */
+    @media (min-width: 600px) {
+      .now { background: #2a6df4; }   /* 태블릿 = 파랑 */
+      .now::after { content: " · 태블릿 (600px ~ 1023px) 📲"; }
+      .cards { grid-template-columns: repeat(2, 1fr); }   /* 1줄에 2개 */
+    }
+
+    /* ===== 3. PC (1024px 이상) ===== */
+    @media (min-width: 1024px) {
+      .now { background: #1a8a3c; }   /* PC = 초록 */
+      .now::after { content: " · PC (1024px 이상) 💻"; }
+
+      /* ☰ 버튼은 숨기고 메뉴를 가로로 펼친다 */
+      .menu-btn { display: none; }
+      nav ul { display: flex; flex-direction: row; justify-content: center; gap: .5rem; }
+
+      /* 본문 왼쪽 + 설명 오른쪽 2단 */
+      .layout { grid-template-columns: 1fr 300px; align-items: start; }
+      .cards { grid-template-columns: repeat(3, 1fr); }   /* 1줄에 3개 */
+      aside { position: sticky; top: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>🍊 제주 특산물 (반응형)</h1>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu">☰</button>
+    </header>
+
+    <nav id="menu">
+      <ul>
+        <li><a href="#cards">특산물</a></li>
+        <li><a href="#guide">반응형 설명</a></li>
+        <li><a href="index.html">내 취향 카드</a></li>
+      </ul>
+    </nav>
+
+    <div class="now" id="now">화면 폭 <span id="width">-</span>px</div>
+
+    <div class="layout">
+      <main class="cards" id="cards">
+        <section class="card"><div class="emoji">🍊</div><h3>감귤</h3><p>11월~1월이 제철인 제주 대표 과일</p></section>
+        <section class="card"><div class="emoji">🍋</div><h3>한라봉</h3><p>한라산을 닮은 꼭지, 진한 단맛</p></section>
+        <section class="card"><div class="emoji">🍑</div><h3>천혜향</h3><p>하늘이 내린 향기, 과즙이 풍부</p></section>
+        <section class="card"><div class="emoji">🐖</div><h3>흑돼지</h3><p>멜젓에 찍어 먹는 숯불구이</p></section>
+        <section class="card"><div class="emoji">🐟</div><h3>갈치</h3><p>은빛 비늘의 조림과 구이</p></section>
+        <section class="card"><div class="emoji">🐠</div><h3>옥돔</h3><p>담백한 구이와 국, 선물용 인기</p></section>
+        <section class="card"><div class="emoji">🍵</div><h3>녹차</h3><p>오설록 차밭과 녹차 디저트</p></section>
+        <section class="card"><div class="emoji">🥕</div><h3>구좌 당근</h3><p>화산 토양에서 자란 달큰한 당근</p></section>
+        <section class="card"><div class="emoji">🐚</div><h3>전복</h3><p>해녀가 잡아 올린 전복죽</p></section>
+      </main>
+
+      <aside id="guide">
+        <h2>📐 반응형 설명</h2>
+        <p>브라우저 창 폭을 줄였다 늘려 보세요. 카드 수, 메뉴, 배치가 바뀝니다.</p>
+        <table>
+          <tr><th>화면</th><th>카드</th><th>메뉴</th></tr>
+          <tr id="row-mobile"><td>📱 ~599px</td><td>1줄 1개</td><td>☰ 접기</td></tr>
+          <tr id="row-tablet"><td>📲 600~1023px</td><td>1줄 2개</td><td>☰ 접기</td></tr>
+          <tr id="row-pc"><td>💻 1024px~</td><td>1줄 3개</td><td>가로 펼침</td></tr>
+        </table>
+        <pre>/* 모바일 우선: 기본은 1개 */
+.cards { grid-template-columns: 1fr; }
+
+@media (min-width: 600px) {
+  .cards { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .cards { grid-template-columns: repeat(3, 1fr); }
+}</pre>
+      </aside>
+    </div>
+
+    <footer>© 2026 제주 특산물 반응형 예제</footer>
+  </div>
+
+  <script>
+    // ☰ 버튼으로 휴대폰·태블릿 메뉴 열고 닫기
+    const menu = document.getElementById('menu');
+    const menuBtn = document.getElementById('menuBtn');
+    menuBtn.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open);
+      menuBtn.textContent = open ? '✕' : '☰';
+    });
+
+    // 지금 화면 폭과 표의 해당 줄 표시 (CSS와 같은 기준을 matchMedia로 확인)
+    const tablet = matchMedia('(min-width: 600px)');
+    const pc = matchMedia('(min-width: 1024px)');
+    function showWidth() {
+      document.getElementById('width').textContent = window.innerWidth;
+      const now = pc.matches ? 'pc' : tablet.matches ? 'tablet' : 'mobile';
+      ['mobile', 'tablet', 'pc'].forEach((k) => {
+        document.getElementById(`row-${k}`).classList.toggle('on', k === now);
+      });
+    }
+    window.addEventListener('resize', showWidth);
+    showWidth();
+  </script>
+</body>
+</html>
