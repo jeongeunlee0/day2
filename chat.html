@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>제주 특산물 길잡이 — 채팅 화면 뼈대</title>
+<style>
+:root{--navy:#1F2A44;--sub:#5B6680;--orange:#E8730C;--bg:#F6F8FC;--line:#E2E7F0;
+ --find:#2F80ED;--judge:#7A4FD0;--act:#27AE60;--findBg:#EAF3FF;--judgeBg:#F2ECFF;--actBg:#E9F8EF}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;background:#DCE3EE;color:var(--navy);font-size:17px}
+.app{max-width:430px;height:100dvh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;box-shadow:0 0 30px rgba(0,0,0,.12)}
+header{background:var(--navy);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px}
+header svg{width:44px;height:44px;flex:none}
+header h1{font-size:20px;margin:0}
+header small{display:block;font-size:14px;color:#BFD0EA;margin-top:2px}
+details.intro{background:#fff;border-bottom:1px solid var(--line);padding:10px 16px}
+details.intro summary{cursor:pointer;font-weight:700;font-size:16px;color:var(--orange)}
+details.intro p{margin:8px 0 0;font-size:16px;line-height:1.55}
+details.intro .src{font-size:13px;color:var(--sub)}
+details.intro .jeju{background:#FFF4E6;border-radius:10px;padding:8px 10px}
+#log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:82%;padding:11px 14px;border-radius:18px;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
+.ai{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:6px}
+.me{align-self:flex-end;background:var(--orange);color:#fff;border-bottom-right-radius:6px}
+.dots span{display:inline-block;width:8px;height:8px;margin:0 2px;border-radius:50%;background:#9AA6BF;animation:b 1s infinite}
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,80%,100%{opacity:.3}40%{opacity:1}}
+details.think{margin-top:8px;border-top:1px dashed var(--line);padding-top:6px}
+details.think summary{cursor:pointer;font-size:14px;color:var(--sub)}
+.steps{display:flex;flex-direction:column;gap:5px;margin-top:6px}
+.steps div{border-radius:8px;padding:6px 9px;font-size:14px}
+.f{background:var(--findBg);color:var(--find)}.j{background:var(--judgeBg);color:var(--judge)}.a{background:var(--actBg);color:var(--act)}
+.chips{display:flex;gap:8px;padding:8px 12px 4px;overflow-x:auto}
+.chips button{flex:none;border:1.5px solid var(--orange);background:#fff;color:var(--orange);border-radius:999px;padding:9px 14px;font-size:15px;font-weight:700;cursor:pointer;min-height:44px}
+form{display:flex;gap:8px;padding:8px 12px 6px;background:var(--bg)}
+input{flex:1;font-size:17px;padding:12px 14px;border:1.5px solid #C5CEDD;border-radius:14px;min-width:0}
+input:focus{outline:2px solid var(--orange);border-color:transparent}
+form button{border:0;background:var(--navy);color:#fff;font-size:16px;font-weight:700;border-radius:14px;padding:0 18px;min-height:48px;cursor:pointer}
+.note{font-size:13px;color:var(--sub);text-align:center;padding:0 12px 10px}
+</style></head><body>
+<div class="app">
+ <header>
+  <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="56" r="30" fill="#F2994A"/><path d="M50 26 q4-14 18-14" stroke="#1B7A43" stroke-width="4" fill="none"/><ellipse cx="62" cy="18" rx="10" ry="5" fill="#27AE60"/><circle cx="40" cy="52" r="2.5" fill="#1F2A44"/><circle cx="58" cy="52" r="2.5" fill="#1F2A44"/><path d="M42 62 q7 6 14 0" stroke="#1F2A44" stroke-width="2.5" fill="none"/></svg>
+  <div><h1>제주 특산물 길잡이</h1><small>조형우 님과 제주 특산물·날씨·체험 장소를 알아봐요</small></div>
+ </header>
+ <details class="intro">
+  <summary>이 에이전트는요</summary>
+  <p>제주를 대표하는 감귤은 보통 11월부터 이듬해 1월까지가 제철이라고 알려져 있어요. <span class="src">(출처: 제주특별자치도 누리집 — 수업 때 직접 확인해 적기)</span></p>
+  <p>특산물마다 나오는 시기와 체험할 수 있는 곳이 달라서, 여행 전에 미리 알아보는 게 좋아요.</p>
+  <p class="jeju"><b>혼저 옵서예</b> — 어서 오세요</p>
+ </details>
+ <div id="log" aria-live="polite"></div>
+ <div class="chips" id="chips"></div>
+ <form id="f"><input id="q" placeholder="궁금한 걸 물어보세요" autocomplete="off" aria-label="질문 입력"><button>보내기</button></form>
+ <div class="note">지금은 가짜 답이에요 · 5일차에 진짜로 찾아보고 판단해요</div>
+</div>
+<script>
+// IP_메모.md 의 "사용자가 물어볼 질문 예시 3개"
+const SUGGEST = ["귤이 일년에 몇개 출하가능가?", "제주대학교는 제주시청에서 얼마나 떨어져 있나?", "다른 특산물이 있는가?"];
+const FAKE = [
+  "혼저 옵서예! 제주 특산물이 궁금하시군요. 감귤, 한라봉, 흑돼지처럼 궁금한 특산물이나 여행 갈 달을 알려 주세요.",
+  "감귤은 겨울이 제철이고, 품종마다 나오는 시기가 달라요. 정확한 출하량은 공식 통계로 확인해서 알려 드릴게요.",
+  "아직 공부 중이에요! 5일차에 날씨랑 체험 장소를 진짜로 알아볼게요."
+];
+let turn = 0;
+const log = document.getElementById('log'), q = document.getElementById('q');
+function add(cls, html){ const d=document.createElement('div'); d.className='msg '+cls; d.innerHTML=html; log.appendChild(d); log.scrollTop=log.scrollHeight; return d; }
+function esc(s){ return s.replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function send(text){
+  text = text.trim(); if(!text) { q.focus(); return; }
+  add('me', esc(text)); q.value='';
+  const wait = add('ai', '<span class="dots"><span></span><span></span><span></span></span>');
+  setTimeout(()=>{
+    wait.innerHTML = esc(FAKE[turn % FAKE.length]) +
+      '<details class="think"><summary>생각 과정 보기</summary><div class="steps">'+
+      '<div class="f">찾기 — (5일차에 채워져요)</div><div class="j">판단 — (5일차에 채워져요)</div><div class="a">실행 — (5일차에 채워져요)</div></div></details>';
+    turn++; log.scrollTop = log.scrollHeight;
+  }, 1000);
+}
+document.getElementById('f').addEventListener('submit', e=>{ e.preventDefault(); send(q.value); });
+const chips = document.getElementById('chips');
+SUGGEST.forEach(s=>{ const b=document.createElement('button'); b.type='button'; b.textContent=s; b.onclick=()=>send(s); chips.appendChild(b); });
+add('ai', esc(FAKE[0])); turn = 1;
+</script>
+</body></html>
