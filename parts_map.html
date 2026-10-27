@@ -19,7 +19,16 @@
     .tag.green { background: #1a8a3c; }
 
     /* index.html 부품 모양 재현: 헤더 · 내비 · 바디 · 푸터가 각각 카드 */
-    .m-header, .m-nav, .m-main, .m-footer { border-radius: 16px; box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+    .m-header, .m-nav, .m-card, .m-article, .m-aside, .m-footer { border-radius: 16px; box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+
+    /* 왼쪽: section 위, article 아래 / 오른쪽: aside 가 두 줄을 차지 */
+    .layout { display: grid; grid-template-columns: 2fr 1fr; grid-template-areas: "section aside" "article aside"; gap: 1.2rem; align-items: start; max-width: 900px; margin: 0 auto 1rem; }
+    .layout > .item { margin: 0; max-width: none; }
+    .a-section { grid-area: section; }
+    .a-article { grid-area: article; }
+    .side { grid-area: aside; flex-direction: column; align-items: stretch; position: sticky; top: 1rem; }
+    .side > .tag { flex: none; }
+    .side > .tag::before { content: "▲ "; }
     .m-header { background: linear-gradient(135deg, #ff7a00, #ffa940); color: #fff; padding: 1.5rem 1rem; text-align: center; }
     .m-header h3 { margin: 0; font-size: 1.4rem; }
     .m-header p { margin: .4rem 0 0; font-size: .85rem; opacity: .9; }
@@ -27,11 +36,18 @@
     .m-nav ul { display: flex; justify-content: center; gap: .6rem; list-style: none; margin: 0; padding: .6rem 1rem; }
     .m-nav li { outline: 2px dashed #1a8a3c; outline-offset: 2px; border-radius: 999px; }
     .m-nav a { display: block; padding: .45rem 1rem; border-radius: 999px; color: #fff; text-decoration: none; }
-    .m-main { background: #fff; padding: 1.5rem 1rem; }
-    .m-main .item { max-width: none; }
-    .m-main .item:last-child { margin-bottom: 0; }
-    .m-card, .m-promo { background: #fff8f0; border: 1px solid #ffe0c2; border-radius: 12px; }
-    .m-card { padding: 1.5rem; text-align: center; }
+    .m-article { background: #fff; padding: 1rem; }
+    .m-article .item { max-width: none; flex-direction: column; align-items: stretch; }
+    .m-article .tag { flex: none; align-self: flex-start; }
+    .m-article .tag::before { content: "▲ "; }
+    .m-article .item:last-child { margin-bottom: 0; }
+    .m-aside { background: #fff; padding: 1.2rem; }
+    .m-aside h4 { margin: 0 0 .8rem; color: #ff7a00; }
+    .m-aside ol { margin: 0 0 .8rem; padding: .3rem .3rem .3rem 1.6rem; line-height: 1.9; font-size: .9rem; outline: 2px dashed #1a8a3c; outline-offset: 2px; border-radius: 4px; }
+    .m-aside .tag { display: block; }
+    .m-aside .tag::before { content: "▲ "; }
+    .m-card { background: #fff; padding: 1.5rem; text-align: center; }
+    .m-promo { background: #fff8f0; border: 1px solid #ffe0c2; border-radius: 12px; }
     .m-card h4 { margin: 0 0 .4rem; }
     .m-card p { margin: 0 0 .8rem; color: #666; font-size: .9rem; }
     .m-num { font-size: 3rem; margin-bottom: .5rem; }
@@ -45,6 +61,10 @@
     th, td { border: 1px solid #ddd; padding: .5rem .8rem; text-align: left; font-size: .9rem; }
     .yes { color: #1a8a3c; font-weight: bold; }
     .no { color: #999; }
+    @media (max-width: 720px) {
+      .layout { grid-template-columns: 1fr; grid-template-areas: "section" "aside" "article"; }
+      .side { position: static; }
+    }
     @media (max-width: 600px) {
       .item { flex-direction: column; align-items: stretch; }
       .tag { flex: none; }
@@ -72,9 +92,8 @@
     <span class="tag green">목록<small>&lt;nav&gt;&lt;ul&gt;&lt;li&gt; 메뉴 3개</small></span>
   </div>
 
-  <div class="item">
-    <div class="mock m-main">
-      <div class="item">
+  <div class="layout">
+      <div class="item a-section">
         <div class="mock m-card">
           <h4>좋아요 카운터</h4>
           <p>버튼을 누를 때마다 2씩 올라가요</p>
@@ -84,8 +103,11 @@
           </span>
           <span class="tag blue" style="margin-left:1rem;display:inline-block;vertical-align:middle">버튼<small>button#btn</small></span>
         </div>
-        <span class="tag">카드<small>section.card</small></span>
+        <span class="tag">카드<small>&lt;section&gt; 카운터</small></span>
       </div>
+
+      <div class="item a-article">
+        <div class="mock m-article">
 
 
       <div class="item">
@@ -257,8 +279,29 @@
         </div>
         <span class="tag">카드<small>section.promo 10/10</small></span>
       </div>
-    </div>
-    <span class="tag">카드 (바디)<small>&lt;main&gt; · 홍보 문구 100줄</small></span>
+        </div>
+        <span class="tag">카드<small>&lt;article&gt; · 홍보 문구 100줄</small></span>
+      </div>
+
+      <div class="item side">
+        <div class="mock m-aside">
+          <h4>📌 바로가기</h4>
+          <ol>
+            <li>🌋 환영합니다</li>
+            <li>🎓 교육 목표</li>
+            <li>📚 다양한 학문의 터전</li>
+            <li>🏝️ 제주만의 캠퍼스</li>
+            <li>🔬 연구와 혁신</li>
+            <li>🤝 지역과 함께하는 대학</li>
+            <li>🌏 세계로 열린 배움</li>
+            <li>🎉 캠퍼스 라이프</li>
+            <li>🚀 졸업 후의 길</li>
+            <li>💌 입학을 기다리며</li>
+          </ol>
+          <span class="tag green">목록<small>&lt;ol&gt;&lt;li&gt; 10개</small></span>
+        </div>
+        <span class="tag">카드<small>&lt;aside&gt; 바로가기</small></span>
+      </div>
   </div>
 
   <div class="item">
@@ -269,11 +312,11 @@
   <table>
     <tr><th>부품</th><th>index.html에 있나?</th><th>위치</th></tr>
     <tr><td>헤더</td><td class="yes">있음</td><td>맨 위 주황색 카드</td></tr>
-    <tr><td>카드</td><td class="yes">있음 (12개)</td><td>바디 카드 1 + 카운터 카드 1 + 홍보 카드 10 (헤더·내비·푸터도 카드 모양)</td></tr>
+    <tr><td>카드</td><td class="yes">있음 (13개)</td><td>section 카운터 1 + article 1 + aside 1 + article 안 홍보 카드 10 (헤더·내비·푸터도 카드 모양)</td></tr>
     <tr><td>버튼</td><td class="yes">있음 (1개)</td><td>카운터 카드 안 +2 버튼</td></tr>
     <tr><td>입력창</td><td class="no">없음</td><td>input / textarea 없음</td></tr>
     <tr><td>탭</td><td class="no">없음</td><td>메뉴는 같은 페이지 안 위치로 이동하는 링크일 뿐, 화면을 바꾸는 탭은 아님</td></tr>
-    <tr><td>목록</td><td class="yes">있음</td><td>내비게이션 메뉴의 ul/li (홍보 문구는 목록이 아닌 p 문단)</td></tr>
+    <tr><td>목록</td><td class="yes">있음</td><td>내비게이션 메뉴의 ul/li 3개 + aside 바로가기 ol/li 10개 (홍보 문구는 목록이 아닌 p 문단)</td></tr>
   </table>
 
   <script>

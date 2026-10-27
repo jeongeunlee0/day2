@@ -12,15 +12,15 @@
       flex-direction: column;
       gap: 1rem;
       min-height: 100vh;
-      max-width: 720px;
+      max-width: 960px;
       margin: 0 auto;
       padding: 1rem;
       font-family: sans-serif;
       background: #f6f6f8;
       color: #222;
     }
-    /* 헤더 · 내비게이션 · 바디 · 푸터를 각각 하나의 카드로 */
-    header, nav, main, footer {
+    /* header · nav · section · article · aside · footer 를 각각 하나의 카드로 */
+    header, nav, section.card, article, aside, footer {
       border-radius: 16px;
       box-shadow: 0 4px 14px rgba(0, 0, 0, .08);
     }
@@ -54,25 +54,44 @@
       text-decoration: none;
     }
     nav a:hover { background: #ff7a00; }
+    /* 왼쪽: section 위, article 아래 / 오른쪽: aside 가 두 줄을 차지 */
     main {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-areas:
+        "section aside"
+        "article aside";
       gap: 1rem;
-      background: #fff;
-      padding: 1.5rem 1rem;
+      align-items: start;
     }
     .card {
-      background: #fff8f0;
-      border: 1px solid #ffe0c2;
-      border-radius: 12px;
+      grid-area: section;
+      background: #fff;
       padding: 2rem;
-      width: 100%;
-      max-width: 360px;
       text-align: center;
       scroll-margin-top: 5rem;
     }
+    article {
+      grid-area: article;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: #fff;
+      padding: 1rem;
+      scroll-margin-top: 5rem;
+    }
+    aside {
+      grid-area: aside;
+      position: sticky;
+      top: 5rem;
+      background: #fff;
+      padding: 1.2rem;
+    }
+    aside h2 { margin: 0 0 .8rem; font-size: 1.1rem; color: #ff7a00; }
+    aside ol { margin: 0; padding-left: 1.2rem; line-height: 1.9; }
+    aside a { color: #333; text-decoration: none; }
+    aside a:hover { color: #ff7a00; text-decoration: underline; }
     .card h2 { margin: 0 0 .5rem; font-size: 1.2rem; }
     .card p { margin: 0 0 1rem; color: #666; }
     #count { font-size: 4rem; margin-bottom: 1rem; }
@@ -99,6 +118,13 @@
       font-size: .85rem;
     }
     footer p { margin: 0; }
+    @media (max-width: 720px) {
+      main {
+        grid-template-columns: 1fr;
+        grid-template-areas: "section" "aside" "article";
+      }
+      aside { position: static; }
+    }
     @media (max-width: 480px) {
       .promo { padding: 1.2rem; }
       nav a { padding: .45rem .7rem; }
@@ -127,7 +153,8 @@
       <button id="btn">+2</button>
     </section>
 
-    <section class="promo" id="about">
+    <article id="about">
+    <section class="promo" id="p1">
       <h2>🌋 제주대학교에 오신 것을 환영합니다</h2>
       <p>삼다도 제주의 중심에서 꿈을 키우는 대학, 제주대학교입니다.</p>
       <p>한라산의 기상과 푸른 바다의 포용력을 닮은 인재를 길러냅니다.</p>
@@ -141,7 +168,7 @@
       <p>당신의 이야기가 제주대학교에서 새로운 장을 엽니다.</p>
     </section>
 
-    <section class="promo">
+    <section class="promo" id="p2">
       <h2>🎓 교육 목표</h2>
       <p>창의적 사고로 문제를 해결하는 인재를 기릅니다.</p>
       <p>깊이 있는 전공 지식과 넓은 교양을 함께 쌓습니다.</p>
@@ -155,7 +182,7 @@
       <p>모두가 존중받는 배움의 문화를 만들어갑니다.</p>
     </section>
 
-    <section class="promo">
+    <section class="promo" id="p3">
       <h2>📚 다양한 학문의 터전</h2>
       <p>인문, 사회, 자연, 공학, 의생명 등 폭넓은 분야를 배울 수 있습니다.</p>
       <p>전공의 경계를 넘나드는 융합 학습의 기회를 제공합니다.</p>
@@ -169,7 +196,7 @@
       <p>배움의 즐거움을 발견하는 시간이 이어집니다.</p>
     </section>
 
-    <section class="promo">
+    <section class="promo" id="p4">
       <h2>🏝️ 제주만의 특별한 캠퍼스</h2>
       <p>눈을 들면 한라산이, 가까이에는 푸른 바다가 펼쳐집니다.</p>
       <p>사계절 변하는 풍경 속에서 걷는 캠퍼스 길은 늘 새롭습니다.</p>
@@ -183,7 +210,7 @@
       <p>이곳에서의 하루하루가 오래 남는 추억이 됩니다.</p>
     </section>
 
-    <section class="promo">
+    <section class="promo" id="p5">
       <h2>🔬 연구와 혁신</h2>
       <p>지역의 문제를 해결하는 연구로 사회에 기여합니다.</p>
       <p>제주의 자연환경과 해양, 농업 분야 연구를 이어갑니다.</p>
@@ -197,7 +224,7 @@
       <p>연구의 성과가 우리 삶을 더 나은 방향으로 이끕니다.</p>
     </section>
 
-    <section class="promo">
+    <section class="promo" id="p6">
       <h2>🤝 지역과 함께하는 대학</h2>
       <p>제주도민과 함께 호흡하는 지역 거점 국립대학입니다.</p>
       <p>지역사회와 협력하여 상생의 가치를 실천합니다.</p>
@@ -211,7 +238,7 @@
       <p>함께할 때 더 멀리 갈 수 있다는 믿음으로 걸어갑니다.</p>
     </section>
 
-    <section class="promo">
+    <section class="promo" id="p7">
       <h2>🌏 세계로 열린 배움</h2>
       <p>해외 대학과의 교류로 시야를 넓힐 수 있습니다.</p>
       <p>교환학생과 어학 프로그램으로 글로벌 경험을 쌓습니다.</p>
@@ -225,7 +252,7 @@
       <p>세계와 소통하는 첫 시작이 이곳에 있습니다.</p>
     </section>
 
-    <section class="promo">
+    <section class="promo" id="p8">
       <h2>🎉 활기찬 캠퍼스 라이프</h2>
       <p>동아리와 학생 활동으로 대학 생활이 더욱 풍성해집니다.</p>
       <p>축제 기간에는 캠퍼스 전체가 웃음과 열기로 가득합니다.</p>
@@ -239,7 +266,7 @@
       <p>청춘의 열정이 캠퍼스를 가득 채웁니다.</p>
     </section>
 
-    <section class="promo">
+    <section class="promo" id="p9">
       <h2>🚀 졸업 후의 길</h2>
       <p>진로 상담과 취업 지원으로 미래 설계를 돕습니다.</p>
       <p>선배들의 경험을 나누는 멘토링 기회를 마련합니다.</p>
@@ -253,7 +280,7 @@
       <p>여러분의 미래를 제주대학교가 함께 만들어갑니다.</p>
     </section>
 
-    <section class="promo">
+    <section class="promo" id="p10">
       <h2>💌 입학을 기다리며</h2>
       <p>꿈을 향해 나아갈 용기만 있다면 충분합니다.</p>
       <p>제주대학교는 열린 마음으로 여러분을 맞이합니다.</p>
@@ -266,6 +293,23 @@
       <p>제주대학교에서 당신의 가능성을 마음껏 펼치세요.</p>
       <p>제주대학교, 당신의 꿈이 시작되는 곳. 🍊</p>
     </section>
+    </article>
+
+    <aside>
+      <h2>📌 바로가기</h2>
+      <ol>
+        <li><a href="#p1">🌋 환영합니다</a></li>
+        <li><a href="#p2">🎓 교육 목표</a></li>
+        <li><a href="#p3">📚 다양한 학문의 터전</a></li>
+        <li><a href="#p4">🏝️ 제주만의 캠퍼스</a></li>
+        <li><a href="#p5">🔬 연구와 혁신</a></li>
+        <li><a href="#p6">🤝 지역과 함께하는 대학</a></li>
+        <li><a href="#p7">🌏 세계로 열린 배움</a></li>
+        <li><a href="#p8">🎉 캠퍼스 라이프</a></li>
+        <li><a href="#p9">🚀 졸업 후의 길</a></li>
+        <li><a href="#p10">💌 입학을 기다리며</a></li>
+      </ol>
+    </aside>
   </main>
 
   <footer>
