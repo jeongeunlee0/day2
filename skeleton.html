@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML 뼈대</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 12px; font-family: sans-serif; background: #f4f8f3; color: #222; }
+
+    /* 격자로 영역 이름을 붙여서 그림과 같은 배치를 만든다 */
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 2fr 1fr;
+      grid-template-areas:
+        "header  header"
+        "nav     nav"
+        "section aside"
+        "article aside"
+        "footer  footer";
+    }
+    header  { grid-area: header; }
+    nav     { grid-area: nav; }
+    section { grid-area: section; }
+    article { grid-area: article; }
+    aside   { grid-area: aside; }
+    footer  { grid-area: footer; }
+
+    /* 빈 칸이 보이도록 테두리와 이름표만 준다 */
+    header, nav, section, article, aside, footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 70px;
+      padding: 16px;
+      border: 2px solid #9aa6bf;
+      border-radius: 8px;
+      background: #fff;
+      font-size: 1.2rem;
+      color: #444;
+    }
+    section, article { min-height: 140px; }
+    aside { min-height: 290px; }
+
+    /* 휴대폰: 한 줄로 쌓기 */
+    @media (max-width: 600px) {
+      .page {
+        grid-template-columns: 1fr;
+        grid-template-areas: "header" "nav" "section" "article" "aside" "footer";
+      }
+      aside { min-height: 120px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>&lt;header&gt;</header>
+    <nav>&lt;nav&gt;</nav>
+    <section>&lt;section&gt;</section>
+    <article>&lt;article&gt;</article>
+    <aside>&lt;aside&gt;</aside>
+    <footer>&lt;footer&gt;</footer>
+  </div>
+</body>
+</html>

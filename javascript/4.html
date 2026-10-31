@@ -25,20 +25,22 @@
             document.getElementById("result").textContent = "결과: " + value;
         }
         // head 안에서는 body가 아직 없으므로, 문서가 다 읽힌 뒤에 버튼에 이벤트를 연결한다.
-        // 버튼 id와 계산 함수를 짝지어 두고, 반복문으로 한 번에 연결한다.
-        const buttons = [
-            { id: 'a', calc: plus },
-            { id: 'b', calc: minus },
-            { id: 'c', calc: mul },
-            { id: 'd', calc: div },
-            { id: 'e', calc: mod },
-        ];
         document.addEventListener('DOMContentLoaded', function () {
-            for (const { id, calc } of buttons) {
-                document.querySelector('button#' + id).addEventListener('mouseover', function () {
-                    show(calc(4, 6));
-                });
-            }
+            document.querySelector('button#a').addEventListener('mouseover', function () {
+                show(plus(4, 6));
+            });
+            document.querySelector('button#b').addEventListener('mouseover', function () {
+                show(minus(4, 6));
+            });
+            document.querySelector('button#c').addEventListener('mouseover', function () {
+                show(mul(4, 6));
+            });
+            document.querySelector('button#d').addEventListener('mouseover', function () {
+                show(div(4, 6));
+            });
+            document.querySelector('button#e').addEventListener('mouseover', function () {
+                show(mod(4, 6));
+            });
         });
     </script>
 </head>

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>제주 특산물 길잡이 — 채팅 화면 뼈대</title>
+<title>제주 특산물 길잡이 — 채팅</title>
 <style>
 :root{--navy:#1F2A44;--sub:#5B6680;--orange:#E8730C;--bg:#F6F8FC;--line:#E2E7F0;
  --find:#2F80ED;--judge:#7A4FD0;--act:#27AE60;--findBg:#EAF3FF;--judgeBg:#F2ECFF;--actBg:#E9F8EF}
@@ -19,7 +19,7 @@ details.intro p{margin:8px 0 0;font-size:16px;line-height:1.55}
 details.intro .src{font-size:13px;color:var(--sub)}
 details.intro .jeju{background:#FFF4E6;border-radius:10px;padding:8px 10px}
 #log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
-.msg{max-width:82%;padding:11px 14px;border-radius:18px;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
+.msg{max-width:88%;padding:11px 14px;border-radius:18px;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
 .ai{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:6px}
 .me{align-self:flex-end;background:var(--orange);color:#fff;border-bottom-right-radius:6px}
 .dots span{display:inline-block;width:8px;height:8px;margin:0 2px;border-radius:50%;background:#9AA6BF;animation:b 1s infinite}
@@ -28,14 +28,19 @@ details.intro .jeju{background:#FFF4E6;border-radius:10px;padding:8px 10px}
 details.think{margin-top:8px;border-top:1px dashed var(--line);padding-top:6px}
 details.think summary{cursor:pointer;font-size:14px;color:var(--sub)}
 .steps{display:flex;flex-direction:column;gap:5px;margin-top:6px}
-.steps div{border-radius:8px;padding:6px 9px;font-size:14px}
+.steps div{border-radius:8px;padding:6px 9px;font-size:14px;line-height:1.45}
 .f{background:var(--findBg);color:var(--find)}.j{background:var(--judgeBg);color:var(--judge)}.a{background:var(--actBg);color:var(--act)}
+.skill{display:inline-block;margin-bottom:6px;padding:2px 9px;border-radius:999px;background:#FFF4E6;color:var(--orange);font-size:13px;font-weight:700}
+.photos{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.photos img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;background:#dde3ea;display:block}
+.credit{font-size:12px;color:var(--sub);margin-top:4px}
 .chips{display:flex;gap:8px;padding:8px 12px 4px;overflow-x:auto}
 .chips button{flex:none;border:1.5px solid var(--orange);background:#fff;color:var(--orange);border-radius:999px;padding:9px 14px;font-size:15px;font-weight:700;cursor:pointer;min-height:44px}
 form{display:flex;gap:8px;padding:8px 12px 6px;background:var(--bg)}
 input{flex:1;font-size:17px;padding:12px 14px;border:1.5px solid #C5CEDD;border-radius:14px;min-width:0}
 input:focus{outline:2px solid var(--orange);border-color:transparent}
 form button{border:0;background:var(--navy);color:#fff;font-size:16px;font-weight:700;border-radius:14px;padding:0 18px;min-height:48px;cursor:pointer}
+form button:disabled{background:#9AA6BF;cursor:default}
 .note{font-size:13px;color:var(--sub);text-align:center;padding:0 12px 10px}
 </style></head><body>
 <div class="app">
@@ -45,41 +50,157 @@ form button{border:0;background:var(--navy);color:#fff;font-size:16px;font-weigh
  </header>
  <details class="intro">
   <summary>이 에이전트는요</summary>
+  <p>질문을 보고 알맞은 <b>스킬</b>을 골라 실제로 실행해요. 날씨(Open-Meteo), 두 장소 사이 거리, 제철 특산물, 사진(Pixabay) 스킬이 있어요.</p>
   <p>제주를 대표하는 감귤은 보통 11월부터 이듬해 1월까지가 제철이라고 알려져 있어요. <span class="src">(출처: 제주특별자치도 누리집 — 수업 때 직접 확인해 적기)</span></p>
-  <p>특산물마다 나오는 시기와 체험할 수 있는 곳이 달라서, 여행 전에 미리 알아보는 게 좋아요.</p>
   <p class="jeju"><b>혼저 옵서예</b> — 어서 오세요</p>
  </details>
  <div id="log" aria-live="polite"></div>
  <div class="chips" id="chips"></div>
- <form id="f"><input id="q" placeholder="궁금한 걸 물어보세요" autocomplete="off" aria-label="질문 입력"><button>보내기</button></form>
- <div class="note">지금은 가짜 답이에요 · 5일차에 진짜로 찾아보고 판단해요</div>
+ <form id="f"><input id="q" placeholder="궁금한 걸 물어보세요" autocomplete="off" aria-label="질문 입력"><button id="send">보내기</button></form>
+ <div class="note">스킬이 실제로 찾아서 답해요 · 숫자는 출처를 꼭 확인하세요</div>
 </div>
 <script>
-// IP_메모.md 의 "사용자가 물어볼 질문 예시 3개"
-const SUGGEST = ["귤이 일년에 몇개 출하가능가?", "제주대학교는 제주시청에서 얼마나 떨어져 있나?", "다른 특산물이 있는가?"];
-const FAKE = [
-  "혼저 옵서예! 제주 특산물이 궁금하시군요. 감귤, 한라봉, 흑돼지처럼 궁금한 특산물이나 여행 갈 달을 알려 주세요.",
-  "감귤은 겨울이 제철이고, 품종마다 나오는 시기가 달라요. 정확한 출하량은 공식 통계로 확인해서 알려 드릴게요.",
-  "아직 공부 중이에요! 5일차에 날씨랑 체험 장소를 진짜로 알아볼게요."
+// ===== 에이전트가 쓰는 정보 =====
+const JEJU = { lat: 33.4996, lon: 126.5312 };   // 제주시청 근처 (날씨 기준 위치)
+// 장소: 이름 문자열(별칭) → 위도·경도 (직선거리 계산용, 대략적인 위치)
+const PLACES = [
+  { name: '제주대학교', alias: ['제주대학교', '제주대'], lat: 33.4562, lon: 126.5618 },
+  { name: '제주시청',   alias: ['제주시청'],            lat: 33.4996, lon: 126.5312 },
+  { name: '제주공항',   alias: ['제주공항', '공항'],      lat: 33.5113, lon: 126.4930 },
+  { name: '성산일출봉', alias: ['성산일출봉', '성산'],    lat: 33.4581, lon: 126.9425 },
+  { name: '함덕해변',   alias: ['함덕해변', '함덕'],      lat: 33.5434, lon: 126.6697 },
+  { name: '협재해변',   alias: ['협재해변', '협재'],      lat: 33.3941, lon: 126.2397 },
+  { name: '오설록',     alias: ['오설록'],               lat: 33.3057, lon: 126.2896 },
 ];
-let turn = 0;
-const log = document.getElementById('log'), q = document.getElementById('q');
-function add(cls, html){ const d=document.createElement('div'); d.className='msg '+cls; d.innerHTML=html; log.appendChild(d); log.scrollTop=log.scrollHeight; return d; }
-function esc(s){ return s.replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
-function send(text){
-  text = text.trim(); if(!text) { q.focus(); return; }
-  add('me', esc(text)); q.value='';
-  const wait = add('ai', '<span class="dots"><span></span><span></span><span></span></span>');
-  setTimeout(()=>{
-    wait.innerHTML = esc(FAKE[turn % FAKE.length]) +
-      '<details class="think"><summary>생각 과정 보기</summary><div class="steps">'+
-      '<div class="f">찾기 — (5일차에 채워져요)</div><div class="j">판단 — (5일차에 채워져요)</div><div class="a">실행 — (5일차에 채워져요)</div></div></details>';
-    turn++; log.scrollTop = log.scrollHeight;
-  }, 1000);
+// 월별 제철 (README의 월별 제철 표)
+const SEASON = {1:'한라봉, 귤',2:'한라봉, 귤',3:'천혜향, 녹차',4:'천혜향, 녹차',5:'마늘, 양파',6:'마늘, 양파',
+                7:'갈치, 한치',8:'갈치, 한치',9:'조생 감귤',10:'조생 감귤',11:'감귤, 레드향',12:'감귤, 레드향'};
+const SPECIALTIES = ['🍊 감귤(11~1월)', '🍋 한라봉(겨울~봄)', '🍑 천혜향', '🟠 레드향', '🐖 흑돼지', '🐟 갈치(여름~가을)',
+                     '🐠 옥돔', '🦑 한치', '🍡 오메기떡', '🍵 녹차', '🥕 구좌 당근'];
+
+// ===== 스킬 도구 =====
+function km(a, b) {            // 두 지점의 직선거리 (하버사인 공식)
+  const R = 6371, r = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * r, dLon = (b.lon - a.lon) * r;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
 }
-document.getElementById('f').addEventListener('submit', e=>{ e.preventDefault(); send(q.value); });
+function wmo(code) {           // 날씨 코드 → 말
+  if (code === 0) return '맑음';
+  if (code <= 3) return '구름';
+  if (code === 45 || code === 48) return '안개';
+  if (code >= 51 && code <= 67) return '비';
+  if (code >= 71 && code <= 77) return '눈';
+  if (code >= 80 && code <= 82) return '소나기';
+  if (code >= 95) return '뇌우';
+  return '흐림';
+}
+function placesIn(text) {      // 질문에서 장소 이름을 글에 나온 순서대로 찾는다
+  const found = [];
+  for (const p of PLACES) {
+    const hit = p.alias.map(a => text.indexOf(a)).filter(i => i >= 0);
+    if (hit.length) found.push({ p, at: Math.min(...hit) });
+  }
+  return found.sort((x, y) => x.at - y.at).map(x => x.p);
+}
+async function fetchJson(url, failMsg) {
+  const res = await fetch(url);
+  let data = null;
+  try { data = await res.json(); } catch (e) { /* 아래에서 처리 */ }
+  if (!res.ok || !data) throw new Error((data && data.error) || `${failMsg} (${res.status})`);
+  return data;
+}
+
+// ===== 스킬 목록 (위에 있을수록 먼저 검사) =====
+const SKILLS = [
+  { id: '사진', test: q => /사진|이미지|보여/.test(q), async run(q) {
+      const word = q.replace(/사진|이미지|보여\s*줘?|보여|줘|좀|해\s*줘|해|주세요|를|을|도/g, ' ').trim() || '제주';
+      const data = await fetchJson('/api/pixabay?q=' + encodeURIComponent(word), '사진 서버가 응답하지 않았어요');
+      const hits = data.hits.slice(0, 4);
+      if (!hits.length) return { text: [`"${word}" 사진을 찾지 못했어요. 다른 낱말로 물어봐 주세요.`],
+        find: `Pixabay에서 "${word}" 검색 → 결과 0장`, judge: '결과가 없으니 보여줄 사진이 없음', act: '다른 검색어를 권함' };
+      return { text: [`"${word}" 사진이에요.`], photos: hits.map(h => h.webformatURL),
+        find: `Pixabay에서 "${word}" 검색 → ${data.totalHits}장 중 ${hits.length}장`, judge: '앞에서부터 4장을 고름', act: '사진을 화면에 보여줌' };
+  } },
+  { id: '출하량', test: q => /출하|생산|몇\s*개|일년|연간/.test(q) && /귤|감귤/.test(q), async run() {
+      const m = new Date().getMonth() + 1;
+      return { text: ['귤의 연간 출하량(개수·톤)은 해마다 달라서, 정확한 숫자는 공식 통계로 확인해야 해요. 제가 숫자를 지어서 말하지는 않을게요.',
+                      `대신 제철은 알려 드릴 수 있어요. 감귤은 보통 11월~1월, 조생 감귤은 9~10월이에요. (지금은 ${m}월)`,
+                      '확인은 제주특별자치도 누리집이나 통계청 KOSIS에서 "감귤 생산량"을 찾아보세요.'],
+        find: '내장된 제철 정보를 확인함 (출하량 통계는 아직 연결되지 않음)', judge: '확인되지 않은 숫자는 말하지 않기로 함',
+        act: '제철 안내와 공식 통계 확인 방법을 알려 줌' };
+  } },
+  { id: '거리', test: q => /떨어|거리|얼마나\s*멀|멀어/.test(q), async run(q) {
+      let ps = placesIn(q);
+      if (ps.length === 1 && ps[0].name !== '제주시청') ps.push(PLACES.find(p => p.name === '제주시청'));
+      if (ps.length < 2) return { text: ['어느 두 장소 사이의 거리가 궁금하세요? 예: 제주대학교와 제주시청, 협재해변과 성산일출봉'],
+        find: `질문에서 장소 이름 ${ps.length}개를 찾음`, judge: '두 곳이 있어야 거리를 잴 수 있음', act: '장소를 다시 물어봄' };
+      const [a, b] = ps, d = km(a, b);
+      return { text: [`${a.name}에서 ${b.name}까지 직선거리는 약 ${d.toFixed(1)}km예요.`,
+                      `실제 도로로는 보통 더 길어요(대략 ${(d * 1.3).toFixed(1)}km 안팎으로 추정). 정확한 길은 지도 서비스로 확인해 주세요.`],
+        find: `${a.name}(${a.lat}, ${a.lon}) · ${b.name}(${b.lat}, ${b.lon}) 좌표를 찾음`, judge: '두 좌표의 직선거리를 계산(도로 거리는 추정)',
+        act: '거리와 확인 방법을 알려 줌' };
+  } },
+  { id: '날씨', test: q => /날씨|기온|온도|비\s*(와|올|오|가)|우산|바람|눈\s*(와|올|오)|맑/.test(q), async run() {
+      const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + JEJU.lat + '&longitude=' + JEJU.lon +
+        '&current=temperature_2m,wind_speed_10m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+        '&wind_speed_unit=ms&timezone=Asia%2FSeoul&forecast_days=3';
+      const d = await fetchJson(url, '날씨 서버가 응답하지 않았어요');
+      const c = d.current, rain = d.daily.precipitation_probability_max[0], hi = d.daily.temperature_2m_max[0], lo = d.daily.temperature_2m_min[0];
+      let advice, why;
+      if (rain >= 60) { advice = '비가 올 가능성이 커요. 실내 체험(오설록 티뮤지엄, 귤 창고 카페)을 추천해요.'; why = `비 올 확률 ${rain}% ≥ 60%`; }
+      else if (c.wind_speed_10m >= 10) { advice = '바람이 세요. 해변·해녀 체험은 피하고 숲길(곶자왈)이나 실내가 좋아요.'; why = `바람 ${c.wind_speed_10m}m/s ≥ 10m/s`; }
+      else { advice = '야외 체험하기 좋아요. 감귤 따기, 올레길 걷기, 승마를 추천해요.'; why = `비 확률 ${rain}% < 60%, 바람 ${c.wind_speed_10m}m/s < 10m/s`; }
+      return { text: [`지금 제주는 ${wmo(c.weather_code)}, ${c.temperature_2m}°C예요. 오늘은 ${lo}~${hi}°C, 비 올 확률 ${rain}%, 바람 ${c.wind_speed_10m}m/s예요.`, advice],
+        find: 'Open-Meteo에서 제주 현재·오늘 예보를 가져옴', judge: why, act: '날씨와 체험 장소 추천을 알려 줌' };
+  } },
+  { id: '특산물', test: q => /특산물|제철|먹|한라봉|흑돼지|갈치|옥돔|한치|오메기|녹차|당근|귤|감귤|뭐|있는/.test(q), async run() {
+      const m = new Date().getMonth() + 1;
+      return { text: [`지금은 ${m}월이라 제철 특산물은 ${SEASON[m]}이에요.`, '제주의 다른 특산물은 ' + SPECIALTIES.join(', ') + '이 있어요.'],
+        find: `오늘 날짜(${m}월)와 월별 제철 표를 확인함`, judge: `${m}월에 해당하는 제철 품목을 고름`, act: '제철 특산물과 다른 특산물을 알려 줌' };
+  } },
+];
+
+// ===== 화면 =====
+const SUGGEST = ['귤이 일년에 몇개 출하가능가?', '제주대학교는 제주시청에서 얼마나 떨어져 있나?', '다른 특산물이 있는가?',
+                 '오늘 제주 날씨 어때?', '감귤 사진 보여줘'];
+const log = document.getElementById('log'), q = document.getElementById('q'), sendBtn = document.getElementById('send');
+let busy = false;
+function add(cls, html) { const d = document.createElement('div'); d.className = 'msg ' + cls; d.innerHTML = html; log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function show(wait, skill, r) {
+  const body = r.text.map(esc).join('<br>');
+  const photos = r.photos ? '<div class="photos">' + r.photos.map(u => `<img src="${esc(u)}" alt="Pixabay 사진" loading="lazy">`).join('') + '</div><div class="credit">이미지 제공: Pixabay</div>' : '';
+  wait.innerHTML = (skill ? `<span class="skill">🛠 ${esc(skill)} 스킬</span><br>` : '') + body + photos +
+    '<details class="think"><summary>생각 과정 보기</summary><div class="steps">' +
+    `<div class="f">찾기 — ${esc(r.find)}</div><div class="j">판단 — ${esc(r.judge)}</div><div class="a">실행 — ${esc(r.act)}</div></div></details>`;
+  log.scrollTop = log.scrollHeight;
+}
+async function send(text) {
+  text = text.trim();
+  if (!text) { q.focus(); return; }
+  if (busy) return;
+  busy = true; sendBtn.disabled = true;
+  add('me', esc(text)); q.value = '';
+  const wait = add('ai', '<span class="dots"><span></span><span></span><span></span></span>');
+  const skill = SKILLS.find(s => s.test(text));
+  try {
+    if (!skill) {
+      show(wait, '', { text: ['아직 그 질문은 어떤 스킬로 풀지 몰라요. 날씨, 두 장소 사이 거리, 제철 특산물, 사진에 대해 물어봐 주세요.'],
+        find: '질문과 맞는 스킬을 찾지 못함', judge: '아는 스킬 4가지(날씨·거리·특산물·사진) 중 해당 없음', act: '물어볼 수 있는 것을 안내함' });
+    } else {
+      show(wait, skill.id, await skill.run(text));
+    }
+  } catch (e) {
+    show(wait, skill ? skill.id : '', { text: ['앗, 찾는 중에 문제가 생겼어요: ' + e.message, '잠시 뒤에 다시 물어봐 주세요.'],
+      find: `${skill ? skill.id : ''} 스킬 실행 중 오류`, judge: e.message, act: '오류를 알려 주고 다시 시도하도록 안내함' });
+  } finally {
+    busy = false; sendBtn.disabled = false; q.focus();
+  }
+}
+document.getElementById('f').addEventListener('submit', e => { e.preventDefault(); send(q.value); });
 const chips = document.getElementById('chips');
-SUGGEST.forEach(s=>{ const b=document.createElement('button'); b.type='button'; b.textContent=s; b.onclick=()=>send(s); chips.appendChild(b); });
-add('ai', esc(FAKE[0])); turn = 1;
+SUGGEST.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.textContent = s; b.onclick = () => send(s); chips.appendChild(b); });
+add('ai', esc('혼저 옵서예! 날씨, 두 장소 사이 거리, 제철 특산물, 사진을 실제로 찾아서 알려 드려요. 아래 질문을 눌러 보거나 직접 물어보세요.'));
 </script>
 </body></html>
